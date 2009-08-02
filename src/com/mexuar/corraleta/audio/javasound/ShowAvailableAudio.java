@@ -1,23 +1,26 @@
+/*
+ * Copyright (C), 2006, Mexuar Technologies Ltd.
+ * 
+ * This file is part of AndroVoIP.
+ * 
+ * AndroVoIP is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * AndroVoIP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with AndroVoIP.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.mexuar.corraleta.audio.javasound;
 
 import java.io.*;
 import javax.sound.sampled.*;
-
-// NAME
-//      $RCSfile: ShowAvailableAudio.java,v $
-// DESCRIPTION
-//      [given below in javadoc format]
-// DELTA
-//      $Revision: 1.1 $
-// CREATED
-//      $Date: 2006/05/10 10:49:41 $
-// COPYRIGHT
-//      Westhawk Ltd
-// TO DO
-//
-// GPL
-// This program is free software, distributed under the terms of
-// the GNU General Public License
 
 /**
  * Test program to list available audio mixers
