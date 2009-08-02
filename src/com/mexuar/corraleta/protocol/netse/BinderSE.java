@@ -321,7 +321,8 @@ public class BinderSE extends Binder implements Runnable  {
      * @return ProtocolEventListener
      */
     public ProtocolEventListener getGuiEventSender(ProtocolEventListener _gui) {
-        return new com.mexuar.corraleta.ui.GuiEventSender(_gui);
+        //return new com.mexuar.corraleta.ui.GuiEventSender(_gui);
+    	return null;
     }
 
 }
