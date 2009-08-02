@@ -22,10 +22,6 @@ package com.mexuar.corraleta.audio;
  * @version 1.0
  */
 public class ABuffer {
-
-    private final static String version_id =
-        "@(#)$Id: ABuffer.java,v 1.6 2006/10/06 11:03:00 uid100 Exp $ Copyright Mexuar Technologies Ltd";
-
   private byte[] _buff;
   private boolean _written;
   private long _stamp;

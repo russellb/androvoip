@@ -461,6 +461,10 @@ public class Call
         Log.debug("Call registered = " + b);
     }
 
+    boolean getRegistered() {
+    	return _registered;
+    }
+    
     /**
      * Sets if this (outbound) call is accepted or not.  This bit of
      * information comes in with a received ACCEPT or REJECT.
@@ -471,6 +475,10 @@ public class Call
         _accepted = b;
     }
 
+    boolean getAccepted() {
+    	return _accepted;
+    }
+    
     /**
      * Starts sending our audio recording. This method creates a new
      * AudioSender object to do that.
@@ -758,7 +766,7 @@ public class Call
      * @see DtmfFrame#DtmfFrame(Call, char)
      */
     public void sendDTMF(char c) {
-        DtmfFrame dtmf = new DtmfFrame(this, c);
+        new DtmfFrame(this, c);   
     }
 
     /**
