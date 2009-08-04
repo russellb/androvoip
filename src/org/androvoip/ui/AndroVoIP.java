@@ -53,9 +53,8 @@ public class AndroVoIP extends TabActivity {
         	/* neat */
         	break;
         case R.id.about:
-        	Intent i = new Intent();
-        	i.setClassName("org.androvoip.ui", "org.androvoip.ui.About");
-        	startActivity(i);
+        	final Intent i = new Intent();
+        	startActivity(i.setClassName("org.androvoip.ui", "org.androvoip.ui.About"));
         	break;
         }
         return false;
