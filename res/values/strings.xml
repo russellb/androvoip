@@ -2,4 +2,5 @@
 <resources>
     <string name="hello">OHAI AndroVoIP!</string>
     <string name="app_name">AndroVoIP</string>
+<string name="about">AndroVoIP, 2009.</string>
 </resources>

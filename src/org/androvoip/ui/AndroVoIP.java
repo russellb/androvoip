@@ -24,25 +24,41 @@ package org.androvoip.ui;
 import org.androvoip.ui.R;
 
 import android.app.TabActivity;
+import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TabHost;
 import android.os.Bundle;
 
-public class AndroVoIP extends TabActivity {
-	private TabHost mTabHost;
-	
+public class AndroVoIP extends TabActivity {	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        mTabHost = getTabHost();
-        
-        mTabHost.addTab(mTabHost.newTabSpec("dialer_tab").setIndicator("Dialer").setContent(R.id.textview1));
-        mTabHost.addTab(mTabHost.newTabSpec("settings_tab").setIndicator("Settings").setContent(R.id.textview2));
-        mTabHost.addTab(mTabHost.newTabSpec("status_tab").setIndicator("Status").setContent(R.id.textview3));
-        
-        mTabHost.setCurrentTab(0);
-
+        final TabHost tab_host = getTabHost();
+        tab_host.addTab(tab_host.newTabSpec("dialer_tab").setIndicator("Dialer").setContent(R.id.textview1));
+        tab_host.addTab(tab_host.newTabSpec("status_tab").setIndicator("Status").setContent(R.id.textview2));
+        tab_host.setCurrentTab(0);
+    }
+    
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.options_menu, menu);
+        return true;
+    }
+    
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.settings:
+        	/* neat */
+        	break;
+        case R.id.about:
+        	Intent i = new Intent();
+        	i.setClassName("org.androvoip.ui", "org.androvoip.ui.About");
+        	startActivity(i);
+        	break;
+        }
+        return false;
     }
 }
