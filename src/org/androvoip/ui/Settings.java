@@ -23,11 +23,20 @@ package org.androvoip.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
-public class Settings extends Activity {	
+public class Settings extends Activity implements OnClickListener {	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
+        
+        ((Button) findViewById(R.id.settings_save)).setOnClickListener(this);
+    }
+    
+    public void onClick(View v) {
+    	/* Save. */
     }
 }

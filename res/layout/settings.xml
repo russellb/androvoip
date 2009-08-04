@@ -12,7 +12,7 @@
 	
 	<TextView
 	    android:text="IAX2 Hostname"
-	    android:textSize="10pt"
+	    android:textSize="8pt"
 	    android:gravity="left"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
@@ -27,7 +27,7 @@
 	
 	<TextView
 	    android:text="Username"
-	    android:textSize="10pt"
+	    android:textSize="8pt"
 	    android:gravity="left"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
@@ -42,7 +42,7 @@
 	
 	<TextView
 	    android:text="Password"
-	    android:textSize="10pt"
+	    android:textSize="8pt"
 	    android:gravity="left"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
@@ -54,6 +54,14 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    android:layout_weight="1"/>
+	    
+	<Button
+	    android:id="@+id/settings_save"
+		android:text="Save"
+		android:textSize="12pt"
+		android:gravity="center"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"/>
 	    
     </LinearLayout>
         
