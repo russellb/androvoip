@@ -31,7 +31,6 @@ import android.widget.TabHost;
 import android.os.Bundle;
 
 public class AndroVoIP extends TabActivity {	
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
