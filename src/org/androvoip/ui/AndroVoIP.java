@@ -48,17 +48,17 @@ public class AndroVoIP extends TabActivity {
     }
     
     public boolean onOptionsItemSelected(MenuItem item) {
-    	final Intent i;
+    	final Intent i = new Intent();
+    	
         switch (item.getItemId()) {
         case R.id.settings:
-        	i = new Intent();
         	startActivity(i.setClassName("org.androvoip.ui", "org.androvoip.ui.Settings"));
         	break;
         case R.id.about:
-        	i = new Intent();
         	startActivity(i.setClassName("org.androvoip.ui", "org.androvoip.ui.About"));
         	break;
         }
+        
         return false;
     }
 }

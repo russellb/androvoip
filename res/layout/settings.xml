@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:layout_weight="1">
+	
+	<TextView
+	    android:text="IAX2 Hostname"
+	    android:textSize="10pt"
+	    android:gravity="left"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_weight="1"/>
+
+	<EditText
+	    android:textSize="12pt"
+	    android:gravity="left"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_weight="1"/>
+	
+	<TextView
+	    android:text="Username"
+	    android:textSize="10pt"
+	    android:gravity="left"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_weight="1"/>
+
+	<EditText
+	    android:textSize="12pt"
+	    android:gravity="left"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_weight="1"/>
+	
+	<TextView
+	    android:text="Password"
+	    android:textSize="10pt"
+	    android:gravity="left"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_weight="1"/>
+
+	<EditText
+	    android:textSize="12pt"
+	    android:gravity="left"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_weight="1"/>
+	    
+    </LinearLayout>
+        
+</LinearLayout>
