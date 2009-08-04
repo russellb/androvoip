@@ -23,14 +23,26 @@ package org.androvoip.ui;
 
 import org.androvoip.ui.R;
 
-import android.app.Activity;
+import android.app.TabActivity;
+import android.widget.TabHost;
 import android.os.Bundle;
 
-public class AndroVoIP extends Activity {
+public class AndroVoIP extends TabActivity {
+	private TabHost mTabHost;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        mTabHost = getTabHost();
+        
+        mTabHost.addTab(mTabHost.newTabSpec("dialer_tab").setIndicator("Dialer").setContent(R.id.textview1));
+        mTabHost.addTab(mTabHost.newTabSpec("settings_tab").setIndicator("Settings").setContent(R.id.textview2));
+        mTabHost.addTab(mTabHost.newTabSpec("status_tab").setIndicator("Status").setContent(R.id.textview3));
+        
+        mTabHost.setCurrentTab(0);
+
     }
 }
