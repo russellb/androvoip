@@ -30,34 +30,32 @@ import android.widget.EditText;
 
 public class Settings extends Activity implements OnClickListener {
 	public static final String PREFS_FILE = "AndroVoIP_settings";
-	
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings);
-        
-        ((Button) findViewById(R.id.settings_save)).setOnClickListener(this);
-        
-        set_field(R.id.host_text,     "host");
-        set_field(R.id.username_text, "username");
-        set_field(R.id.password_text, "password");
-    }
 
-    private void set_field(int id, String key) {
-    	((EditText) findViewById(id)).setText(
-    			getSharedPreferences(PREFS_FILE, MODE_PRIVATE).getString(key, "")
-    		);
-    }
-    
-    private String get_string_by_id(int id) {
-    	return ((EditText) findViewById(id)).getText().toString();
-    }
-    
-    public void onClick(View v) {
-        getSharedPreferences(PREFS_FILE, MODE_PRIVATE).edit()
-        		.putString("host",     get_string_by_id(R.id.host_text))
-        		.putString("username", get_string_by_id(R.id.username_text))
-        		.putString("password", get_string_by_id(R.id.password_text))
-        		.commit();
-    }
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.settings);
+
+		((Button) findViewById(R.id.settings_save)).setOnClickListener(this);
+
+		set_field(R.id.host_text, "host");
+		set_field(R.id.username_text, "username");
+		set_field(R.id.password_text, "password");
+	}
+
+	private void set_field(int id, String key) {
+		((EditText) findViewById(id)).setText(getSharedPreferences(PREFS_FILE,
+				MODE_PRIVATE).getString(key, ""));
+	}
+
+	private String get_string_by_id(int id) {
+		return ((EditText) findViewById(id)).getText().toString();
+	}
+
+	public void onClick(View v) {
+		getSharedPreferences(PREFS_FILE, MODE_PRIVATE).edit().putString("host",
+				get_string_by_id(R.id.host_text)).putString("username",
+				get_string_by_id(R.id.username_text)).putString("password",
+				get_string_by_id(R.id.password_text)).commit();
+	}
 }

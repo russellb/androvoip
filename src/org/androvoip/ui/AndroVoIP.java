@@ -30,35 +30,39 @@ import android.view.MenuItem;
 import android.widget.TabHost;
 import android.os.Bundle;
 
-public class AndroVoIP extends TabActivity {	
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+public class AndroVoIP extends TabActivity {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
 
-        final TabHost tab_host = getTabHost();
-        tab_host.addTab(tab_host.newTabSpec("dialer_tab").setIndicator("Dialer").setContent(R.id.textview1));
-        tab_host.addTab(tab_host.newTabSpec("status_tab").setIndicator("Status").setContent(R.id.textview2));
-        tab_host.setCurrentTab(0);
-    }
-    
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.options_menu, menu);
-        return true;
-    }
-    
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	final Intent i = new Intent();
-    	
-        switch (item.getItemId()) {
-        case R.id.settings:
-        	startActivity(i.setClassName("org.androvoip.ui", "org.androvoip.ui.Settings"));
-        	break;
-        case R.id.about:
-        	startActivity(i.setClassName("org.androvoip.ui", "org.androvoip.ui.About"));
-        	break;
-        }
-        
-        return false;
-    }
+		final TabHost tab_host = getTabHost();
+		tab_host.addTab(tab_host.newTabSpec("dialer_tab")
+				.setIndicator("Dialer").setContent(R.id.textview1));
+		tab_host.addTab(tab_host.newTabSpec("status_tab")
+				.setIndicator("Status").setContent(R.id.textview2));
+		tab_host.setCurrentTab(0);
+	}
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.options_menu, menu);
+		return true;
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		final Intent i = new Intent();
+
+		switch (item.getItemId()) {
+		case R.id.settings:
+			startActivity(i.setClassName("org.androvoip.ui",
+					"org.androvoip.ui.Settings"));
+			break;
+		case R.id.about:
+			startActivity(i.setClassName("org.androvoip.ui",
+					"org.androvoip.ui.About"));
+			break;
+		}
+
+		return false;
+	}
 }
