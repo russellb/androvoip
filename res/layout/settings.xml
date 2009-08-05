@@ -5,23 +5,19 @@
 	android:layout_height="fill_parent"
 	android:layout_weight="1"> 
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
 
     <LinearLayout
-	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:layout_weight="1">
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_weight="1">
 	
 	<TextView
 	    android:text="IAX2 Hostname"
 	    android:textSize="8pt"
 	    android:gravity="left"
 	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
+	    android:layout_height="wrap_content"
 	    android:layout_weight="1"/>
 
 	<EditText
@@ -29,7 +25,7 @@
 	    android:textSize="12pt"
 	    android:gravity="left"
 	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
+	    android:layout_height="wrap_content"
 	    android:layout_weight="1"/>
 	
 	<TextView
@@ -37,7 +33,7 @@
 	    android:textSize="8pt"
 	    android:gravity="left"
 	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
+	    android:layout_height="wrap_content"
 	    android:layout_weight="1"/>
 
 	<EditText
@@ -45,7 +41,7 @@
 	    android:textSize="12pt"
 	    android:gravity="left"
 	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
+	    android:layout_height="wrap_content"
 	    android:layout_weight="1"/>
 	
 	<TextView
@@ -53,7 +49,7 @@
 	    android:textSize="8pt"
 	    android:gravity="left"
 	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
+	    android:layout_height="wrap_content"
 	    android:layout_weight="1"/>
 
 	<EditText
@@ -62,7 +58,7 @@
 	    android:gravity="left"
 	    android:password="true"
 	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
+	    android:layout_height="wrap_content"
 	    android:layout_weight="1"/>
 	    
 	<Button
@@ -74,7 +70,5 @@
 	    android:layout_height="wrap_content"/>
 	    
     </LinearLayout>
-        
-</LinearLayout>
 
 </ScrollView>
