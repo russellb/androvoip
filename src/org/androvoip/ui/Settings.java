@@ -21,7 +21,10 @@
 
 package org.androvoip.ui;
 
+import org.androvoip.R;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -57,5 +60,9 @@ public class Settings extends Activity implements OnClickListener {
 				get_string_by_id(R.id.host_text)).putString("username",
 				get_string_by_id(R.id.username_text)).putString("password",
 				get_string_by_id(R.id.password_text)).commit();
+		
+		startService(new Intent().setClassName("org.androvoip",
+						"org.androvoip.iax2.IAX2Service"));
+
 	}
 }

@@ -21,7 +21,7 @@
 
 package org.androvoip.ui;
 
-import org.androvoip.ui.R;
+import org.androvoip.R;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -48,6 +48,9 @@ public class AndroVoIP extends TabActivity {
 						.getDrawable(android.R.drawable.ic_menu_info_details))
 				.setContent(R.id.textview2));
 		tab_host.setCurrentTab(0);
+		
+		startService(new Intent().setClassName("org.androvoip",
+								"org.androvoip.iax2.IAX2Service"));
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,11 +63,11 @@ public class AndroVoIP extends TabActivity {
 
 		switch (item.getItemId()) {
 		case R.id.settings:
-			startActivity(i.setClassName("org.androvoip.ui",
+			startActivity(i.setClassName("org.androvoip",
 					"org.androvoip.ui.Settings"));
 			break;
 		case R.id.about:
-			startActivity(i.setClassName("org.androvoip.ui",
+			startActivity(i.setClassName("org.androvoip",
 					"org.androvoip.ui.About"));
 			break;
 		}

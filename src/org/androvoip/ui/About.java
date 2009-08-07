@@ -21,7 +21,7 @@
 
 package org.androvoip.ui;
 
-import org.androvoip.ui.R;
+import org.androvoip.R;
 
 import android.app.Activity;
 import android.os.Bundle;
