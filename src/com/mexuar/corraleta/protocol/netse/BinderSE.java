@@ -187,7 +187,9 @@ public class BinderSE extends Binder implements Runnable  {
             _listener = null;
         }
         // Birgit: is this the best place for it??
-        _a8.cleanUp();
+        if (_a8 != null) {
+        	_a8.cleanUp();
+        }
     }
 
 
@@ -321,7 +323,6 @@ public class BinderSE extends Binder implements Runnable  {
      * @return ProtocolEventListener
      */
     public ProtocolEventListener getGuiEventSender(ProtocolEventListener _gui) {
-        //return new com.mexuar.corraleta.ui.GuiEventSender(_gui);
     	return null;
     }
 
