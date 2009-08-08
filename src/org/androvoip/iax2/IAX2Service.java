@@ -54,6 +54,22 @@ public class IAX2Service extends Service {
 		registered = false;
 	}
 	
+	/**
+	 * Called due to a call to startService().
+	 * <p>
+	 * This function is a bit hackish right now, but it's a start.
+	 * Essentially, every time the AndroVoIP Activities decide that the
+	 * IAX2 service should refresh itself and check to see if it needs to
+	 * change registration parameters, it calls startService().  Note that
+	 * this will get called on every startService() call, but onCreate() is
+	 * what only gets called once when a call to startService() results in
+	 * the service starting up.
+	 * <p>
+	 * Eventually, we should move to creating an API for interacting with
+	 * this service.  Instead of startService(), Activities will bind to the
+	 * service using bindService().  With this approach, a service can provide
+	 * an API for the activity to interact with it after binding.
+	 */
 	@Override
 	public void onStart(Intent arg0, int start_id) {
 		final String host = get_config_param("host");
