@@ -23,6 +23,7 @@ package org.androvoip.iax2;
 
 import java.net.SocketException;
 
+import org.androvoip.audio.AndroidAudioInterface;
 import org.androvoip.ui.Settings;
 
 import com.mexuar.corraleta.protocol.netse.BinderSE;
@@ -38,6 +39,7 @@ public class IAX2Service extends Service {
 	private String last_password;
 	private BinderSE binder;
 	private boolean registered;
+	private AndroidAudioInterface audio_interface;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -52,6 +54,7 @@ public class IAX2Service extends Service {
 		last_password = "";
 		binder = null;
 		registered = false;
+		audio_interface = new AndroidAudioInterface();
 	}
 	
 	/**
@@ -97,7 +100,7 @@ public class IAX2Service extends Service {
 		/* Start the binder if we have not done so already. */
 		try {
 			if (binder == null) {
-				binder = new BinderSE(host, null);
+				binder = new BinderSE(host, audio_interface);
 				last_host = host;
 				last_username = "";
 				last_password = "";
