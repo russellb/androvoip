@@ -24,6 +24,7 @@
 		android:id="@+id/host_text"
 	    android:textSize="12pt"
 	    android:gravity="left"
+	    android:singleLine="true"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_weight="1"/>
@@ -40,6 +41,7 @@
         android:id="@+id/username_text"
 	    android:textSize="12pt"
 	    android:gravity="left"
+	    android:singleLine="true"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_weight="1"/>
@@ -57,6 +59,7 @@
 	    android:textSize="12pt"
 	    android:gravity="left"
 	    android:password="true"
+	    android:singleLine="true"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_weight="1"/>
