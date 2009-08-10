@@ -23,23 +23,23 @@ package org.androvoip.iax2;
 
 import java.net.SocketException;
 
-import org.androvoip.audio.AndroidAudioInterface;
-import org.androvoip.ui.Settings;
 import org.androvoip.R;
+import org.androvoip.audio.AndroidAudioInterface;
 import org.androvoip.ui.AndroVoIP;
+import org.androvoip.ui.Settings;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+import android.util.Log;
 
 import com.mexuar.corraleta.protocol.Call;
 import com.mexuar.corraleta.protocol.Friend;
 import com.mexuar.corraleta.protocol.ProtocolEventListener;
 import com.mexuar.corraleta.protocol.netse.BinderSE;
-
-import android.app.PendingIntent;
-import android.app.Service;
-import android.app.NotificationManager;
-import android.app.Notification;
-import android.content.Intent;
-import android.os.IBinder;
-import android.util.Log;
 
 public class IAX2Service extends Service implements ProtocolEventListener {
 	private String last_host;
@@ -137,7 +137,7 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 			this.binder.register(username, password, this, true);
 			this.last_username = username;
 			this.last_password = password;
-			//this.registered = true;
+			// this.registered = true;
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -189,21 +189,22 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 	}
 
 	/**
-	 * @see com.mexuar.corraleta.protocol.ProtocolEventListener#registered(com.mexuar.corraleta.protocol.Friend, boolean)
+	 * @see com.mexuar.corraleta.protocol.ProtocolEventListener#registered(com.mexuar.corraleta.protocol.Friend,
+	 *      boolean)
 	 */
 	public void registered(Friend f, boolean s) {
-		Intent intent = new Intent(this, AndroVoIP.class);
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+		final Intent intent = new Intent(this, AndroVoIP.class);
+		final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
 				intent, 0);
 
-		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		final NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		CharSequence mText;
 		if (s) {
 			mText = "Registered";
 		} else {
 			mText = "Unregistered";
 		}
-		Notification notification = new Notification(R.drawable.icon,
+		final Notification notification = new Notification(R.drawable.icon,
 				getString(R.string.app_name) + " " + mText, System
 						.currentTimeMillis());
 
@@ -212,7 +213,7 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		notificationManager.notify(0, notification);
 
-		registered = s;
+		this.registered = s;
 	}
 
 	/**
@@ -224,7 +225,8 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 	}
 
 	/**
-	 * @see com.mexuar.corraleta.protocol.ProtocolEventListener#setHostReachable(com.mexuar.corraleta.protocol.Friend, boolean, int)
+	 * @see com.mexuar.corraleta.protocol.ProtocolEventListener#setHostReachable(com.mexuar.corraleta.protocol.Friend,
+	 *      boolean, int)
 	 */
 	public void setHostReachable(Friend f, boolean b, int roundtrip) {
 		// TODO Auto-generated method stub
@@ -234,7 +236,8 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 	/**
 	 * Retrieve a configuration value.
 	 * 
-	 * @param arg configuration paramater to retrieve
+	 * @param arg
+	 *            configuration paramater to retrieve
 	 * 
 	 * @return String configuration value
 	 */
