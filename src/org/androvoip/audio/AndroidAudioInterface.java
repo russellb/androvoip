@@ -27,6 +27,7 @@ import java.io.InputStream;
 import com.mexuar.corraleta.audio.AudioInterface;
 import com.mexuar.corraleta.audio.SampleListener;
 import com.mexuar.corraleta.protocol.AudioSender;
+import com.mexuar.corraleta.protocol.VoiceFrame;
 
 public class AndroidAudioInterface implements AudioInterface {
 	public void changedProps() {
@@ -81,7 +82,6 @@ public class AndroidAudioInterface implements AudioInterface {
 
 	public void setAudioSender(AudioSender as) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void startPlay() {
@@ -106,7 +106,6 @@ public class AndroidAudioInterface implements AudioInterface {
 
 	public void stopRec() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void stopRinging() {
@@ -115,8 +114,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	public Integer supportedCodecs() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Integer(VoiceFrame.LIN16_BIT);
 	}
 
 	public void write(byte[] buff, long timestamp) throws IOException {

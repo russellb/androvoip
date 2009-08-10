@@ -41,11 +41,17 @@ public class IAX2Service extends Service {
 	private boolean registered;
 	private AndroidAudioInterface audio_interface;
 
+	/**
+	 * @see android.app.Service#onBind(android.content.Intent)
+	 */
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
 	}
 
+	/**
+	 * @see android.app.Service#onCreate()
+	 */
 	@Override
 	public void onCreate() {
 		Log.d("IAX2Service", "onCreate(), initializing vars.");
@@ -71,6 +77,8 @@ public class IAX2Service extends Service {
 	 * service. Instead of startService(), Activities will bind to the service
 	 * using bindService(). With this approach, a service can provide an API for
 	 * the activity to interact with it after binding.
+	 * 
+	 * @see android.app.Service#onStart(android.content.Intent, int)
 	 */
 	@Override
 	public void onStart(Intent arg0, int start_id) {
