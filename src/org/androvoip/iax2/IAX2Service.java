@@ -237,7 +237,7 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 	 * Retrieve a configuration value.
 	 * 
 	 * @param arg
-	 *            configuration paramater to retrieve
+	 *            configuration parameter to retrieve
 	 * 
 	 * @return String configuration value
 	 */
