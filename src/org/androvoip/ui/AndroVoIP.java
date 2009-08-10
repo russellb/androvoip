@@ -35,17 +35,17 @@ public class AndroVoIP extends TabActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
+		
 		final TabHost tab_host = getTabHost();
 		tab_host.addTab(tab_host.newTabSpec("dialer_tab")
 				.setIndicator("Dialer", 
 						this.getResources()
-						.getDrawable(android.R.drawable.ic_menu_call))
+						.getDrawable(R.drawable.ic_tab_call))
 				.setContent(R.id.textview1));
 		tab_host.addTab(tab_host.newTabSpec("status_tab")
 				.setIndicator("Status", 
 						this.getResources()
-						.getDrawable(android.R.drawable.ic_menu_info_details))
+						.getDrawable(R.drawable.ic_tab_info_details))
 				.setContent(R.id.textview2));
 		tab_host.setCurrentTab(0);
 		
