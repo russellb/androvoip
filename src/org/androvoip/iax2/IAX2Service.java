@@ -198,6 +198,7 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 
 		notification.setLatestEventInfo(this, getString(R.string.app_name)
 				+ " " + mText, f.getStatus(), pendingIntent);
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		notificationManager.notify(0, notification);
 
 		registered = s;
