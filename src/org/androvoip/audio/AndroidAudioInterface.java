@@ -24,6 +24,8 @@ package org.androvoip.audio;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.util.Log;
+
 import com.mexuar.corraleta.audio.AudioInterface;
 import com.mexuar.corraleta.audio.SampleListener;
 import com.mexuar.corraleta.protocol.AudioSender;
@@ -31,11 +33,15 @@ import com.mexuar.corraleta.protocol.VoiceFrame;
 
 public class AndroidAudioInterface implements AudioInterface {
 	/**
+	 * Audio properties have changed.
+	 * <p>
+	 * This shouldn't be called, as there are no settings available for
+	 * changing audio device configuration right now.
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#changedProps()
 	 */
 	public void changedProps() {
-		// TODO Auto-generated method stub
-		
+		Log.e("AndroidAudioInterface", "changedProps() got called.");
 	}
 
 	/**
