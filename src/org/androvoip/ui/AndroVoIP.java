@@ -41,12 +41,12 @@ public class AndroVoIP extends TabActivity {
 				.setIndicator("Dialer", 
 						this.getResources()
 						.getDrawable(R.drawable.ic_tab_call))
-				.setContent(R.id.textview1));
+				.setContent(R.id.dialer));
 		tab_host.addTab(tab_host.newTabSpec("status_tab")
 				.setIndicator("Status", 
 						this.getResources()
 						.getDrawable(R.drawable.ic_tab_info_details))
-				.setContent(R.id.textview2));
+				.setContent(R.id.status));
 		tab_host.setCurrentTab(0);
 		
 		startService(new Intent().setClassName("org.androvoip",
