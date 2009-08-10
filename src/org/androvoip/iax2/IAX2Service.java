@@ -25,15 +25,23 @@ import java.net.SocketException;
 
 import org.androvoip.audio.AndroidAudioInterface;
 import org.androvoip.ui.Settings;
+import org.androvoip.R;
+import org.androvoip.ui.AndroVoIP;
 
+import com.mexuar.corraleta.protocol.Call;
+import com.mexuar.corraleta.protocol.Friend;
+import com.mexuar.corraleta.protocol.ProtocolEventListener;
+import com.mexuar.corraleta.protocol.netse.BinderSE;
+
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.NotificationManager;
+import android.app.Notification;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.mexuar.corraleta.protocol.netse.BinderSE;
-
-public class IAX2Service extends Service {
+public class IAX2Service extends Service implements ProtocolEventListener {
 	private String last_host;
 	private String last_username;
 	private String last_password;
@@ -123,15 +131,88 @@ public class IAX2Service extends Service {
 
 		try {
 			if (this.registered) {
-				this.binder.unregister(null);
+				this.binder.unregister(this);
+				this.registered = false;
 			}
-			this.binder.register(username, password, null, true);
+			this.binder.register(username, password, this, true);
 			this.last_username = username;
 			this.last_password = password;
-			this.registered = true;
+			//this.registered = true;
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void onDestroy() {
+		if (this.binder == null) {
+			return;
+		}
+
+		try {
+			if (this.registered) {
+				this.binder.unregister(this);
+				this.registered = false;
+			}
+			this.binder.stop();
+			this.binder = null;
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void answered(Call c) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void hungUp(Call c) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void newCall(Call c) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void registered(Friend f, boolean s) {
+		Intent intent = new Intent(this, AndroVoIP.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+				intent, 0);
+
+		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		CharSequence mText;
+		if (s) {
+			mText = "Registered";
+		} else {
+			mText = "Unregistered";
+		}
+		Notification notification = new Notification(R.drawable.icon,
+				getString(R.string.app_name) + " " + mText, System
+						.currentTimeMillis());
+
+		notification.setLatestEventInfo(this, getString(R.string.app_name)
+				+ " " + mText, f.getStatus(), pendingIntent);
+		notificationManager.notify(0, notification);
+
+		registered = s;
+	}
+
+	@Override
+	public void ringing(Call c) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setHostReachable(Friend f, boolean b, int roundtrip) {
+		// TODO Auto-generated method stub
+
 	}
 
 	private String get_config_param(String arg) {

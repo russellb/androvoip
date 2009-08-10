@@ -323,7 +323,7 @@ public class BinderSE extends Binder implements Runnable  {
      * @return ProtocolEventListener
      */
     public ProtocolEventListener getGuiEventSender(ProtocolEventListener _gui) {
-    	return null;
+    	return _gui;
     }
 
 }
