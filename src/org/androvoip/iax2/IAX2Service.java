@@ -143,6 +143,9 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 		}
 	}
 
+	/**
+	 * @see android.app.Service#onDestroy()
+	 */
 	@Override
 	public void onDestroy() {
 		if (this.binder == null) {
@@ -161,25 +164,33 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 		}
 	}
 
-	@Override
+	/**
+	 * @see com.mexuar.corraleta.protocol.ProtocolEventListener#answered(com.mexuar.corraleta.protocol.Call)
+	 */
 	public void answered(Call c) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
+	/**
+	 * @see com.mexuar.corraleta.protocol.ProtocolEventListener#hungUp(com.mexuar.corraleta.protocol.Call)
+	 */
 	public void hungUp(Call c) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
+	/**
+	 * @see com.mexuar.corraleta.protocol.ProtocolEventListener#newCall(com.mexuar.corraleta.protocol.Call)
+	 */
 	public void newCall(Call c) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
+	/**
+	 * @see com.mexuar.corraleta.protocol.ProtocolEventListener#registered(com.mexuar.corraleta.protocol.Friend, boolean)
+	 */
 	public void registered(Friend f, boolean s) {
 		Intent intent = new Intent(this, AndroVoIP.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
@@ -204,18 +215,29 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 		registered = s;
 	}
 
-	@Override
+	/**
+	 * @see com.mexuar.corraleta.protocol.ProtocolEventListener#ringing(com.mexuar.corraleta.protocol.Call)
+	 */
 	public void ringing(Call c) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
+	/**
+	 * @see com.mexuar.corraleta.protocol.ProtocolEventListener#setHostReachable(com.mexuar.corraleta.protocol.Friend, boolean, int)
+	 */
 	public void setHostReachable(Friend f, boolean b, int roundtrip) {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * Retrieve a configuration value.
+	 * 
+	 * @param arg configuration paramater to retrieve
+	 * 
+	 * @return String configuration value
+	 */
 	private String get_config_param(String arg) {
 		return getSharedPreferences(Settings.PREFS_FILE, MODE_PRIVATE)
 				.getString(arg, "");
