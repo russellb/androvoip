@@ -35,8 +35,8 @@ public class AndroidAudioInterface implements AudioInterface {
 	/**
 	 * Audio properties have changed.
 	 * <p>
-	 * This shouldn't be called, as there are no settings available for
-	 * changing audio device configuration right now.
+	 * This shouldn't be called, as there are no settings available for changing
+	 * audio device configuration right now.
 	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#changedProps()
 	 */
@@ -45,35 +45,53 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
+	 * Clean up after the parent BinderSE is stopped.
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#cleanUp()
 	 */
 	public void cleanUp() {
-		// TODO Auto-generated method stub
-		
+		/* Nothing, yet. */
 	}
 
 	/**
+	 * Generate codec preferences string.
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#codecPrefString()
+	 * @see com.mexuar.corraleta.audio.javasound.Audio8k#codecPrefString()
 	 */
 	public String codecPrefString() {
-		// TODO Auto-generated method stub
-		return null;
+		final char[] prefs = { VoiceFrame.LIN16_NO };
+		String ret = "";
+		for (int i = 0; i < prefs.length; i++) {
+			ret += (char) (prefs[i] + 66);
+		}
+		return ret;
 	}
 
 	/**
+	 * Return an audio interface for a specified format.
+	 * <p>
+	 * Right now, we only support LIN16, and the handling for LIN16 will be
+	 * built in to this class.
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#getByFormat(java.lang.Integer)
 	 */
 	public AudioInterface getByFormat(Integer format) {
-		// TODO Auto-generated method stub
-		return null;
+		switch (format.intValue()) {
+		case VoiceFrame.LIN16_BIT:
+			return this;
+		default:
+			return null;
+		}
 	}
 
 	/**
+	 * Return the bit for the format of this AudioInterface.
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#getFormatBit()
 	 */
 	public int getFormatBit() {
-		// TODO Auto-generated method stub
-		return 0;
+		return VoiceFrame.LIN16_BIT;
 	}
 
 	/**
@@ -89,7 +107,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 */
 	public void playAudioStream(InputStream in) throws IOException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -113,7 +131,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 */
 	public void sampleRecord(SampleListener list) throws IOException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -128,7 +146,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 */
 	public void startPlay() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -144,7 +162,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 */
 	public void startRinging() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -152,7 +170,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 */
 	public void stopPlay() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -167,7 +185,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 */
 	public void stopRinging() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -182,7 +200,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 */
 	public void write(byte[] buff, long timestamp) throws IOException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -190,7 +208,6 @@ public class AndroidAudioInterface implements AudioInterface {
 	 */
 	public void writeDirect(byte[] buff) throws IOException {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
-
