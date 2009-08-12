@@ -2,5 +2,5 @@
 <resources>
     <string name="hello">OHAI AndroVoIP!</string>
     <string name="app_name">AndroVoIP</string>
-<string name="about">AndroVoIP -- VoIP for Android.\nhttp://code.google.com/p/androvoip/\n\nAndroVoIP:\n -&gt; License: GPLv3\n -&gt; Copyright (C) 2009 - Russell Bryant\n -&gt; Russell Bryant &lt;russell@russellbryant.net&gt;\n\nIAX2 Stack:\n -&gt; License: GPLv3\n -&gt; Copyright (C) 2006-2007, Mexuar Technologies Ltd.\n -&gt; Copyright (C) 2009, Russell Bryant</string>
+<string name="about">AndroVoIP -- VoIP for Android.\nhttp://www.androvoip.org/</string>
 </resources>
