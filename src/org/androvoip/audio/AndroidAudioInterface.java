@@ -35,8 +35,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	/**
 	 * Audio properties have changed.
 	 * <p>
-	 * This shouldn't be called, as there are no settings available for changing
-	 * audio device configuration right now.
+	 * No active code uses this.
 	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#changedProps()
 	 */
@@ -46,15 +45,19 @@ public class AndroidAudioInterface implements AudioInterface {
 
 	/**
 	 * Clean up after the parent BinderSE is stopped.
+	 * <p>
+	 * Called by BinderSE.
 	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#cleanUp()
 	 */
-	public void cleanUp() {
+	public void cleanUp() { /* used */
 		/* Nothing, yet. */
 	}
 
 	/**
 	 * Generate codec preferences string.
+	 * <p>
+	 * Called by ProtocolControlFrame.
 	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#codecPrefString()
 	 * @see com.mexuar.corraleta.audio.javasound.Audio8k#codecPrefString()
@@ -73,6 +76,8 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * <p>
 	 * Right now, we only support LIN16, and the handling for LIN16 will be
 	 * built in to this class.
+	 * <p>
+	 * Called by Call.
 	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#getByFormat(java.lang.Integer)
 	 */
@@ -87,6 +92,8 @@ public class AndroidAudioInterface implements AudioInterface {
 
 	/**
 	 * Return the bit for the format of this AudioInterface.
+	 * <p>
+	 * Called by Call.
 	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#getFormatBit()
 	 */
@@ -95,6 +102,8 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
+	 * Called by Call.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#getSampSz()
 	 */
 	public int getSampSz() {
@@ -103,38 +112,46 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
+	 * No active code uses this.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#playAudioStream(java.io.InputStream)
 	 */
 	public void playAudioStream(InputStream in) throws IOException {
-		// TODO Auto-generated method stub
-
+		Log.e("AndroidAudioInterface", "playAudioStream() got called");
 	}
 
 	/**
+	 * No active code uses this.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#readDirect(byte[])
 	 */
 	public long readDirect(byte[] buff) throws IOException {
-		// TODO Auto-generated method stub
+		Log.e("AndroidAudioInterface", "readDirect() got called");
 		return 0;
 	}
 
 	/**
+	 * No active code uses this.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#readWithTime(byte[])
 	 */
 	public long readWithTime(byte[] buff) throws IOException {
-		// TODO Auto-generated method stub
+		Log.e("AndroidAudioInterface", "readWithTime() got called");
 		return 0;
 	}
 
 	/**
+	 * No active code uses this.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#sampleRecord(com.mexuar.corraleta.audio.SampleListener)
 	 */
 	public void sampleRecord(SampleListener list) throws IOException {
-		// TODO Auto-generated method stub
-
+		Log.e("AndroidAudioInterface", "sampleRecord() got called");
 	}
 
 	/**
+	 * Used by Call.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#setAudioSender(com.mexuar.corraleta.protocol.AudioSender)
 	 */
 	public void setAudioSender(AudioSender as) {
@@ -142,14 +159,17 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
+	 * No active code uses this.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#startPlay()
 	 */
 	public void startPlay() {
-		// TODO Auto-generated method stub
-
+		Log.e("AndroidAudioInterface", "startPlay() got called");
 	}
 
 	/**
+	 * Used by Call.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#startRec()
 	 */
 	public long startRec() {
@@ -158,22 +178,26 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
+	 * Used by Call.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#startRinging()
 	 */
 	public void startRinging() {
 		// TODO Auto-generated method stub
-
 	}
 
 	/**
+	 * Used by Call.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#stopPlay()
 	 */
 	public void stopPlay() {
 		// TODO Auto-generated method stub
-
 	}
 
 	/**
+	 * Used by Call.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#stopRec()
 	 */
 	public void stopRec() {
@@ -181,14 +205,19 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
+	 * Used by Call.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#stopRinging()
 	 */
 	public void stopRinging() {
 		// TODO Auto-generated method stub
-
 	}
 
 	/**
+	 * Return an Integer bitmask of the codecs we support.
+	 * <p>
+	 * Used by ProtocolControlFrameNew.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#supportedCodecs()
 	 */
 	public Integer supportedCodecs() {
@@ -196,18 +225,20 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
+	 * Used by Call.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#write(byte[], long)
 	 */
 	public void write(byte[] buff, long timestamp) throws IOException {
 		// TODO Auto-generated method stub
-
 	}
 
 	/**
+	 * No active code uses this right now.
+	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#writeDirect(byte[])
 	 */
 	public void writeDirect(byte[] buff) throws IOException {
-		// TODO Auto-generated method stub
-
+		Log.e("AndroidAudioInterface", "writeDirect() got called");
 	}
 }
