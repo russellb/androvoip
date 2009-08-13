@@ -1,77 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView 
-	xmlns:android="http://schemas.android.com/apk/res/android" 
-	android:layout_width="fill_parent" 
-	android:layout_height="fill_parent"
-	android:layout_weight="1"> 
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
 
-
-    <LinearLayout
-		android:orientation="vertical"
-		android:layout_width="fill_parent"
+	<ScrollView
+		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent"
-		android:layout_weight="1">
-	
-	<TextView
-	    android:text="IAX2 Hostname"
-	    android:textSize="8pt"
-	    android:gravity="left"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="1"/>
+		android:layout_weight="1"> 
 
-	<EditText
-		android:id="@+id/host_text"
-	    android:textSize="12pt"
-	    android:gravity="left"
-	    android:singleLine="true"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="1"/>
-	
-	<TextView
-	    android:text="Username"
-	    android:textSize="8pt"
-	    android:gravity="left"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="1"/>
+    	<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:layout_weight="1">
 
-	<EditText
-        android:id="@+id/username_text"
-	    android:textSize="12pt"
-	    android:gravity="left"
-	    android:singleLine="true"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="1"/>
-	
-	<TextView
-	    android:text="Password"
-	    android:textSize="8pt"
-	    android:gravity="left"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="1"/>
+		<TextView
+	    	android:text="IAX2 Hostname"
+	    	android:textSize="8pt"
+	    	android:gravity="left"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_weight="1"/>
 
-	<EditText
-        android:id="@+id/password_text"
-	    android:textSize="12pt"
-	    android:gravity="left"
-	    android:password="true"
-	    android:singleLine="true"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="1"/>
-	    
-	<Button
-	    android:id="@+id/settings_save"
-		android:text="Save"
-		android:textSize="12pt"
-		android:gravity="center"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"/>
-	    
-    </LinearLayout>
+		<EditText
+			android:id="@+id/host_text"
+	    	android:textSize="12pt"
+	    	android:gravity="left"
+	    	android:singleLine="true"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_weight="1"/>
 
-</ScrollView>
+		<TextView
+	    	android:text="Username"
+	    	android:textSize="8pt"
+	    	android:gravity="left"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_weight="1"/>
+
+		<EditText
+	        android:id="@+id/username_text"
+	    	android:textSize="12pt"
+	    	android:gravity="left"
+	    	android:singleLine="true"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_weight="1"/>
+
+		<TextView
+	    	android:text="Password"
+	    	android:textSize="8pt"
+	    	android:gravity="left"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_weight="1"/>
+
+		<EditText
+        	android:id="@+id/password_text"
+	    	android:textSize="12pt"
+	    	android:gravity="left"
+	    	android:password="true"
+	    	android:singleLine="true"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_weight="1"/>
+	    </LinearLayout>
+	</ScrollView>
+
+	<FrameLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<Button
+		    android:id="@+id/settings_save"
+			android:text="Save"
+			android:textSize="12pt"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:layout_gravity="left"/>
+
+		<Button
+		    android:id="@+id/settings_cancel"
+			android:text="Cancel"
+			android:textSize="12pt"
+			android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:layout_gravity="right"/>
+	</FrameLayout>
+</LinearLayout>
