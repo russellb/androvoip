@@ -24,7 +24,6 @@ package org.androvoip.iax2;
 import java.net.SocketException;
 
 import org.androvoip.R;
-import org.androvoip.audio.AndroidAudioInterface;
 import org.androvoip.ui.AndroVoIP;
 import org.androvoip.ui.Settings;
 

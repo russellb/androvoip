@@ -19,7 +19,7 @@
  * along with AndroVoIP.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.androvoip.audio;
+package org.androvoip.iax2;
 
 import java.io.IOException;
 import java.io.InputStream;
