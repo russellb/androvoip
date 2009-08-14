@@ -57,7 +57,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	/**
 	 * Generate codec preferences string.
 	 * <p>
-	 * Called by ProtocolControlFrame.
+	 * Called by com.mexuar.corraleta.protocol.ProtocolControlFrame.
 	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#codecPrefString()
 	 * @see com.mexuar.corraleta.audio.javasound.Audio8k#codecPrefString()
@@ -93,7 +93,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	/**
 	 * Return the bit for the format of this AudioInterface.
 	 * <p>
-	 * Called by Call.
+	 * Called by com.mexuar.corraleta.protocol.Call.
 	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#getFormatBit()
 	 */
