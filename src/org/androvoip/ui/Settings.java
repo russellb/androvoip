@@ -27,7 +27,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -39,24 +38,30 @@ public class Settings extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
 
-		((Button) findViewById(R.id.settings_save)).setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				getSharedPreferences(PREFS_FILE, MODE_PRIVATE).edit().putString("host",
-						get_string_by_id(R.id.host_text)).putString("username",
-						get_string_by_id(R.id.username_text)).putString("password",
-						get_string_by_id(R.id.password_text)).commit();
+		((Button) findViewById(R.id.settings_save))
+				.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						getSharedPreferences(PREFS_FILE, MODE_PRIVATE).edit()
+								.putString("host",
+										get_string_by_id(R.id.host_text))
+								.putString("username",
+										get_string_by_id(R.id.username_text))
+								.putString("password",
+										get_string_by_id(R.id.password_text))
+								.commit();
 
-				startService(new Intent().setClassName("org.androvoip",
-						"org.androvoip.iax2.IAX2Service"));
-				finish();
-			}
-		});
-		((Button) findViewById(R.id.settings_cancel)).setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				// Don't need to save anything, so...just exit.
-				finish();
-			}
-		});
+						startService(new Intent().setClassName("org.androvoip",
+								"org.androvoip.iax2.IAX2Service"));
+						finish();
+					}
+				});
+		((Button) findViewById(R.id.settings_cancel))
+				.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						// Don't need to save anything, so...just exit.
+						finish();
+					}
+				});
 
 		set_field(R.id.host_text, "host");
 		set_field(R.id.username_text, "username");
@@ -72,5 +77,4 @@ public class Settings extends Activity {
 		return ((EditText) findViewById(id)).getText().toString();
 	}
 
-	
 }
