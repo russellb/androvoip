@@ -77,7 +77,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * Right now, we only support LIN16, and the handling for LIN16 will be
 	 * built in to this class.
 	 * <p>
-	 * Called by Call.
+	 * Called by com.mexuar.corraleta.protocol.Call.
 	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#getByFormat(java.lang.Integer)
 	 */
