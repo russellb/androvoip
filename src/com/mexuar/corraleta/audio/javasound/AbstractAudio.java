@@ -143,8 +143,8 @@ public abstract class AbstractAudio
      * @exception IOException Description of Exception
      */
     protected void test() throws IOException {
-        //boolean first = true;
-        //long start = this.startRec();
+        boolean first = true;
+        long start = this.startRec();
         long stamp = 0;
         this.startPlay();
         byte buff[] = new byte[this.getSampSz()];
