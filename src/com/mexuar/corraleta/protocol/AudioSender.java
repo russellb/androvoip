@@ -33,6 +33,7 @@ public class AudioSender {
     private Call _call;
     private int _formatBit;
     private boolean _done = false;
+    private long _astart;
     private long _cstart;
     private long _nextdue;
     private int _stamp;
@@ -67,6 +68,9 @@ public class AudioSender {
 
             if (!_done) {
 
+            	long stamp = _aif.readWithTime(_buff);
+            	@SuppressWarnings("unused")
+				long now = stamp - _astart + _cstart;
                 _stamp = (int) _nextdue;
                 char mstamp = (char) (0xffff & _stamp);
                 if (_first || (mstamp < _lastminisent)) {
