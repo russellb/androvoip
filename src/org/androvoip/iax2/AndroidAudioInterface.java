@@ -131,7 +131,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
-	 * No active code uses this.
+	 * Called by com.mexuar.corraleta.protocol.AudioSender
 	 *
 	 * @see com.mexuar.corraleta.audio.AudioInterface#readWithTime(byte[])
 	 */
