@@ -239,6 +239,8 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
+	 * Stop sending our audio.
+	 * <p>
 	 * Used by com.mexuar.corraleta.protocol.Call.
 	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#stopRec()
@@ -265,7 +267,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
-	 * Return an Integer bitmask of the codecs we support.
+	 * Return an Integer bit mask of the codecs we support.
 	 * <p>
 	 * Used by ProtocolControlFrameNew.
 	 * 
@@ -276,12 +278,16 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
-	 * Used by Call.
+	 * Handle received audio.
+	 * <p>
+	 * Used by com.mexuar.corraleta.protocol.Call.
+	 * 
+	 * TODO Do something useful with the received audio.
 	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#write(byte[], long)
 	 */
 	public void write(byte[] buff, long timestamp) throws IOException {
-		// TODO Auto-generated method stub
+		/* Drop it on the floor! */
 	}
 
 	/**
