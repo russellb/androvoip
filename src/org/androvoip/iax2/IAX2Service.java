@@ -36,11 +36,14 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.mexuar.corraleta.protocol.Call;
+import com.mexuar.corraleta.protocol.CallManager;
 import com.mexuar.corraleta.protocol.Friend;
 import com.mexuar.corraleta.protocol.ProtocolEventListener;
 import com.mexuar.corraleta.protocol.netse.BinderSE;
 
-public class IAX2Service extends Service implements ProtocolEventListener {
+public class IAX2Service 
+		extends Service 
+		implements ProtocolEventListener, CallManager {
 	private String last_host;
 	private String last_username;
 	private String last_password;
@@ -168,7 +171,6 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 	 */
 	public void answered(Call c) {
 		// TODO Auto-generated method stub
-
 	}
 
 	/**
@@ -176,7 +178,6 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 	 */
 	public void hungUp(Call c) {
 		// TODO Auto-generated method stub
-
 	}
 
 	/**
@@ -184,7 +185,6 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 	 */
 	public void newCall(Call c) {
 		// TODO Auto-generated method stub
-
 	}
 
 	/**
@@ -197,12 +197,8 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 				intent, 0);
 
 		final NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		CharSequence mText;
-		if (s) {
-			mText = "Registered";
-		} else {
-			mText = "Unregistered";
-		}
+		
+		final CharSequence mText = s ? "Registered" : "Unregistered";	
 		final Notification notification = new Notification(R.drawable.icon,
 				getString(R.string.app_name) + " " + mText, System
 						.currentTimeMillis());
@@ -220,7 +216,6 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 	 */
 	public void ringing(Call c) {
 		// TODO Auto-generated method stub
-
 	}
 
 	/**
@@ -229,7 +224,6 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 	 */
 	public void setHostReachable(Friend f, boolean b, int roundtrip) {
 		// TODO Auto-generated method stub
-
 	}
 
 	/**
@@ -243,5 +237,19 @@ public class IAX2Service extends Service implements ProtocolEventListener {
 	private String get_config_param(String arg) {
 		return getSharedPreferences(Settings.PREFS_FILE, MODE_PRIVATE)
 				.getString(arg, "");
+	}
+
+	/**
+	 * Return whether or not we will handle this call.
+	 * <p>
+	 * This does not answer the call. Returning false immediately rejects it.
+	 * Returning true means that we will give the user the opportunity to
+	 * consider answering it, and will request that the call be answered if the
+	 * user decides that is what should happen.
+	 * 
+	 * @see com.mexuar.corraleta.protocol.CallManager#accept(com.mexuar.corraleta.protocol.Call)
+	 */
+	public boolean accept(Call ca) {
+		return false;
 	}
 }
