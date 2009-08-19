@@ -136,7 +136,6 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#readWithTime(byte[])
 	 */
 	public long readWithTime(byte[] buff) throws IOException {
-		Log.e("AndroidAudioInterface", "readWithTime() got called");
 		return 0;
 	}
 
