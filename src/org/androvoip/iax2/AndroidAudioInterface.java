@@ -1,6 +1,9 @@
 /*
  * AndroVoIP -- VoIP for Android.
  *
+ * Copyright (C), 2006, Mexuar Technologies Ltd.
+ *   -- Adapted from Audio8k.java
+ *   
  * Copyright (C), 2009, Russell Bryant
  * 
  * Russell Bryant <russell@russellbryant.net>
@@ -32,6 +35,9 @@ import com.mexuar.corraleta.protocol.AudioSender;
 import com.mexuar.corraleta.protocol.VoiceFrame;
 
 public class AndroidAudioInterface implements AudioInterface {
+	private AudioSender as;
+	private Thread rec_thread;
+
 	/**
 	 * Audio properties have changed.
 	 * <p>
@@ -46,12 +52,12 @@ public class AndroidAudioInterface implements AudioInterface {
 	/**
 	 * Clean up after the parent BinderSE is stopped.
 	 * <p>
-	 * Called by BinderSE.
+	 * Called by com.mexuar.corraleta.protocol.netse.BinderSE.
 	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#cleanUp()
 	 */
-	public void cleanUp() { /* used */
-		/* Nothing, yet. */
+	public void cleanUp() {
+
 	}
 
 	/**
@@ -102,18 +108,17 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
-	 * Called by Call.
-	 *
+	 * Called by com.mexuar.corraleta.protocol.Call.
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#getSampSz()
 	 */
 	public int getSampSz() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 320;
 	}
 
 	/**
 	 * No active code uses this.
-	 *
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#playAudioStream(java.io.InputStream)
 	 */
 	public void playAudioStream(InputStream in) throws IOException {
@@ -122,7 +127,7 @@ public class AndroidAudioInterface implements AudioInterface {
 
 	/**
 	 * No active code uses this.
-	 *
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#readDirect(byte[])
 	 */
 	public long readDirect(byte[] buff) throws IOException {
@@ -131,8 +136,37 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
+	 * called every 20 ms
+	 */
+	private void frameTime() {
+		if (this.as != null) {
+			try {
+				this.as.send();
+			} catch (final IOException x) {
+				Log.w("AndroidAudioInterface.frameTime()", x.getMessage());
+			}
+		}
+	}
+
+	/**
+	 * TODO Handle drift, etc.
+	 */
+	private void recTick() {
+		final long delta = 20;
+
+		while (this.rec_thread != null) {
+			frameTime();
+			try {
+				Thread.sleep(delta);
+			} catch (final InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
 	 * Called by com.mexuar.corraleta.protocol.AudioSender
-	 *
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#readWithTime(byte[])
 	 */
 	public long readWithTime(byte[] buff) throws IOException {
@@ -141,7 +175,7 @@ public class AndroidAudioInterface implements AudioInterface {
 
 	/**
 	 * No active code uses this.
-	 *
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#sampleRecord(com.mexuar.corraleta.audio.SampleListener)
 	 */
 	public void sampleRecord(SampleListener list) throws IOException {
@@ -149,17 +183,27 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
-	 * Used by Call.
-	 *
+	 * Used by com.mexuar.corraleta.protocol.Call.
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#setAudioSender(com.mexuar.corraleta.protocol.AudioSender)
 	 */
 	public void setAudioSender(AudioSender as) {
-		// TODO Auto-generated method stub
+		this.as = as;
+
+		final Runnable trec = new Runnable() {
+			public void run() {
+				recTick();
+			}
+		};
+
+		this.rec_thread = new Thread(trec, "rec_thread");
+		this.rec_thread.setPriority(Thread.MAX_PRIORITY - 1);
+		this.rec_thread.start();
 	}
 
 	/**
 	 * No active code uses this.
-	 *
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#startPlay()
 	 */
 	public void startPlay() {
@@ -167,8 +211,8 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
-	 * Used by Call.
-	 *
+	 * Used by com.mexuar.corraleta.protocol.Call.
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#startRec()
 	 */
 	public long startRec() {
@@ -177,8 +221,8 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
-	 * Used by Call.
-	 *
+	 * Used by com.mexuar.corraleta.protocol.Call.
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#startRinging()
 	 */
 	public void startRinging() {
@@ -186,8 +230,8 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
-	 * Used by Call.
-	 *
+	 * Used by com.mexuar.corraleta.protocol.Call.
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#stopPlay()
 	 */
 	public void stopPlay() {
@@ -195,17 +239,25 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
-	 * Used by Call.
-	 *
+	 * Used by com.mexuar.corraleta.protocol.Call.
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#stopRec()
 	 */
 	public void stopRec() {
-		// TODO Auto-generated method stub
+		try {
+			final Thread t = this.rec_thread;
+			this.rec_thread = null;
+			t.join();
+		} catch (final InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		this.as = null;
 	}
 
 	/**
-	 * Used by Call.
-	 *
+	 * Used by com.mexuar.corraleta.protocol.Call.
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#stopRinging()
 	 */
 	public void stopRinging() {
@@ -216,7 +268,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * Return an Integer bitmask of the codecs we support.
 	 * <p>
 	 * Used by ProtocolControlFrameNew.
-	 *
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#supportedCodecs()
 	 */
 	public Integer supportedCodecs() {
@@ -225,7 +277,7 @@ public class AndroidAudioInterface implements AudioInterface {
 
 	/**
 	 * Used by Call.
-	 *
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#write(byte[], long)
 	 */
 	public void write(byte[] buff, long timestamp) throws IOException {
@@ -234,7 +286,7 @@ public class AndroidAudioInterface implements AudioInterface {
 
 	/**
 	 * No active code uses this right now.
-	 *
+	 * 
 	 * @see com.mexuar.corraleta.audio.AudioInterface#writeDirect(byte[])
 	 */
 	public void writeDirect(byte[] buff) throws IOException {
