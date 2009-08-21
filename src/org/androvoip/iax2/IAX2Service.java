@@ -50,12 +50,18 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 	private boolean registered;
 	private AndroidAudioInterface audio_interface;
 
+	private final IAX2ServiceAPI.Stub api_binder = new IAX2ServiceAPI.Stub() {
+		public boolean get_registration_status() {
+			return IAX2Service.this.registered;
+		}
+	};
+
 	/**
 	 * @see android.app.Service#onBind(android.content.Intent)
 	 */
 	@Override
 	public IBinder onBind(Intent intent) {
-		return null;
+		return this.api_binder;
 	}
 
 	/**
