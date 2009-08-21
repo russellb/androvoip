@@ -3,4 +3,5 @@ bin/
 gen/
 *.orig
 .swp
+.swo
 AndroVoIP.apk
