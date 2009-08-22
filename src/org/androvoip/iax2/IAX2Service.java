@@ -43,12 +43,13 @@ import com.mexuar.corraleta.protocol.netse.BinderSE;
 
 public class IAX2Service extends Service implements ProtocolEventListener,
 		CallManager {
-	private String last_host;
-	private String last_username;
-	private String last_password;
-	private BinderSE binder;
-	private boolean registered;
-	private AndroidAudioInterface audio_interface;
+	private String last_host = "";
+	private String last_username = "";
+	private String last_password = "";
+	private BinderSE binder = null;
+	private boolean registered = false;
+	private boolean register_sent = false;
+	private AndroidAudioInterface audio_interface = null;
 
 	private final IAX2ServiceAPI.Stub api_binder = new IAX2ServiceAPI.Stub() {
 		public boolean get_registration_status() {
@@ -69,12 +70,7 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 	 */
 	@Override
 	public void onCreate() {
-		Log.d("IAX2Service", "onCreate(), initializing vars.");
-		this.last_host = "";
-		this.last_username = "";
-		this.last_password = "";
-		this.binder = null;
-		this.registered = false;
+		Log.d("IAX2Service", "onCreate()");
 		this.audio_interface = new AndroidAudioInterface();
 	}
 
@@ -132,7 +128,7 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 		}
 
 		if (username.equals(this.last_username)
-				&& password.equals(this.last_password) && this.registered) {
+				&& password.equals(this.last_password) && this.register_sent) {
 			return;
 		}
 
@@ -140,11 +136,12 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 			if (this.registered) {
 				this.binder.unregister(this);
 				this.registered = false;
+				this.register_sent = false;
 			}
 			this.binder.register(username, password, this, true);
 			this.last_username = username;
 			this.last_password = password;
-			// this.registered = true;
+			this.register_sent = true;
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -163,6 +160,7 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 			if (this.registered) {
 				this.binder.unregister(this);
 				this.registered = false;
+				this.register_sent = false;
 			}
 			this.binder.stop();
 			this.binder = null;
