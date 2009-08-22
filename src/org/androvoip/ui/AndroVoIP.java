@@ -26,11 +26,13 @@ import org.androvoip.R;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 
-public class AndroVoIP extends TabActivity {
+public class AndroVoIP extends TabActivity implements OnTabChangeListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,6 +48,7 @@ public class AndroVoIP extends TabActivity {
 					this.getResources().getDrawable(R.drawable.ic_tab_info_details))
 				.setContent(R.id.status));
 		tab_host.setCurrentTab(0);
+		tab_host.setOnTabChangedListener(this);
 
 		startService(new Intent().setClassName("org.androvoip",
 				"org.androvoip.iax2.IAX2Service"));
@@ -73,5 +76,9 @@ public class AndroVoIP extends TabActivity {
 		}
 
 		return false;
+	}
+
+	public void onTabChanged(String arg0) {
+		Log.d("AndroVoIP", "Tab selected: " + arg0);
 	}
 }
