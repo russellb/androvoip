@@ -25,39 +25,39 @@ import org.androvoip.R;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
-import android.os.Bundle;
 
 public class AndroVoIP extends TabActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		
+
 		final TabHost tab_host = getTabHost();
 		tab_host.addTab(tab_host.newTabSpec("dialer_tab")
-				.setIndicator("Dialer", 
-						this.getResources()
-						.getDrawable(R.drawable.ic_tab_call))
+				.setIndicator("Dialer",
+					this.getResources().getDrawable(R.drawable.ic_tab_call))
 				.setContent(R.id.dialer));
 		tab_host.addTab(tab_host.newTabSpec("status_tab")
-				.setIndicator("Status", 
-						this.getResources()
-						.getDrawable(R.drawable.ic_tab_info_details))
+				.setIndicator("Status",
+					this.getResources().getDrawable(R.drawable.ic_tab_info_details))
 				.setContent(R.id.status));
 		tab_host.setCurrentTab(0);
-		
+
 		startService(new Intent().setClassName("org.androvoip",
-								"org.androvoip.iax2.IAX2Service"));
+				"org.androvoip.iax2.IAX2Service"));
 	}
 
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.options_menu, menu);
 		return true;
 	}
 
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		final Intent i = new Intent();
 
