@@ -22,5 +22,7 @@
 package org.androvoip.iax2;
 
 interface IAX2ServiceAPI {
-	boolean get_registration_status();
+	boolean getRegistrationStatus();
+	
+	void refreshIAX2Registration();
 }

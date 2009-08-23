@@ -22,17 +22,24 @@
 package org.androvoip.ui;
 
 import org.androvoip.R;
+import org.androvoip.iax2.IAX2ServiceAPI;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class Settings extends Activity implements OnClickListener {
+public class Settings extends Activity implements OnClickListener,
+		ServiceConnection {
 	public static final String PREFS_FILE = "AndroVoIP_settings";
+	private IAX2ServiceAPI serviceConnection = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,43 +49,72 @@ public class Settings extends Activity implements OnClickListener {
 		((Button) findViewById(R.id.settings_save)).setOnClickListener(this);
 		((Button) findViewById(R.id.settings_cancel)).setOnClickListener(this);
 
-		set_field(R.id.host_text, "host");
-		set_field(R.id.username_text, "username");
-		set_field(R.id.password_text, "password");
+		setField(R.id.host_text, "host");
+		setField(R.id.username_text, "username");
+		setField(R.id.password_text, "password");
+
+		bindService(new Intent().setClassName("org.androvoip",
+				"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
 	}
 
-	private void set_field(int id, String key) {
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+
+		unbindService(this);
+		this.serviceConnection = null;
+	}
+
+	private void setField(int id, String key) {
 		((EditText) findViewById(id)).setText(getSharedPreferences(PREFS_FILE,
 				MODE_PRIVATE).getString(key, ""));
 	}
 
-	private String get_string_by_id(int id) {
+	private String getStringById(int id) {
 		return ((EditText) findViewById(id)).getText().toString();
 	}
 
-	private void button_save() {
-		getSharedPreferences(PREFS_FILE, MODE_PRIVATE).edit()
-				.putString("host", get_string_by_id(R.id.host_text))
-				.putString("username", get_string_by_id(R.id.username_text))
-				.putString("password", get_string_by_id(R.id.password_text))
-				.commit();
+	private void buttonSave() {
+		if (this.serviceConnection == null) {
+			bindService(new Intent().setClassName("org.androvoip",
+					"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
 
-		startService(new Intent().setClassName("org.androvoip",
-				"org.androvoip.iax2.IAX2Service"));
+			return;
+		}
+
+		getSharedPreferences(PREFS_FILE, MODE_PRIVATE).edit().putString("host",
+				getStringById(R.id.host_text)).putString("username",
+				getStringById(R.id.username_text)).putString("password",
+				getStringById(R.id.password_text)).commit();
+
+		try {
+			this.serviceConnection.refreshIAX2Registration();
+		} catch (final RemoteException e) {
+			/* Lost connection. */
+			e.printStackTrace();
+		}
 
 		finish();
 	}
-	
-	private void button_cancel() {
+
+	private void buttonCancel() {
 		// Don't need to save anything, so...just exit.
 		finish();
 	}
 
 	public void onClick(View v) {
 		if (v == findViewById(R.id.settings_save)) {
-			button_save();
+			buttonSave();
 		} else if (v == findViewById(R.id.settings_cancel)) {
-			button_cancel();
+			buttonCancel();
 		}
+	}
+
+	public void onServiceConnected(ComponentName arg0, IBinder arg1) {
+		this.serviceConnection = IAX2ServiceAPI.Stub.asInterface(arg1);
+	}
+
+	public void onServiceDisconnected(ComponentName arg0) {
+		this.serviceConnection = null;
 	}
 }

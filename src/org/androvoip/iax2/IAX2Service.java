@@ -33,6 +33,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 
 import com.mexuar.corraleta.protocol.Call;
@@ -43,17 +44,21 @@ import com.mexuar.corraleta.protocol.netse.BinderSE;
 
 public class IAX2Service extends Service implements ProtocolEventListener,
 		CallManager {
-	private String last_host = "";
-	private String last_username = "";
-	private String last_password = "";
+	private String lastHost = "";
+	private String lastUsername = "";
+	private String lastPassword = "";
 	private BinderSE binder = null;
 	private boolean registered = false;
-	private boolean register_sent = false;
-	private AndroidAudioInterface audio_interface = null;
+	private boolean registerSent = false;
+	private AndroidAudioInterface audioInterface = null;
 
-	private final IAX2ServiceAPI.Stub api_binder = new IAX2ServiceAPI.Stub() {
-		public boolean get_registration_status() {
+	private final IAX2ServiceAPI.Stub apiBinder = new IAX2ServiceAPI.Stub() {
+		public boolean getRegistrationStatus() throws RemoteException {
 			return IAX2Service.this.registered;
+		}
+
+		public void refreshIAX2Registration() throws RemoteException {
+			IAX2Service.this.refreshIAX2Binder();
 		}
 	};
 
@@ -62,7 +67,8 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 	 */
 	@Override
 	public IBinder onBind(Intent intent) {
-		return this.api_binder;
+		refreshIAX2Binder();
+		return this.apiBinder;
 	}
 
 	/**
@@ -71,41 +77,23 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 	@Override
 	public void onCreate() {
 		Log.d("IAX2Service", "onCreate()");
-		this.audio_interface = new AndroidAudioInterface();
+		this.audioInterface = new AndroidAudioInterface();
 	}
 
-	/**
-	 * Called due to a call to startService().
-	 * <p>
-	 * This function is a bit hackish right now, but it's a start. Essentially,
-	 * every time the AndroVoIP Activities decide that the IAX2 service should
-	 * refresh itself and check to see if it needs to change registration
-	 * parameters, it calls startService(). Note that this will get called on
-	 * every startService() call, but onCreate() is what only gets called once
-	 * when a call to startService() results in the service starting up.
-	 * <p>
-	 * Eventually, we should move to creating an API for interacting with this
-	 * service. Instead of startService(), Activities will bind to the service
-	 * using bindService(). With this approach, a service can provide an API for
-	 * the activity to interact with it after binding.
-	 * 
-	 * @see android.app.Service#onStart(android.content.Intent, int)
-	 */
-	@Override
-	public void onStart(Intent arg0, int start_id) {
-		final String host = get_config_param("host");
-		final String username = get_config_param("username");
-		final String password = get_config_param("password");
+	private synchronized void refreshIAX2Binder() {
+		final String host = getConfigParam("host");
+		final String username = getConfigParam("username");
+		final String password = getConfigParam("password");
 
 		Log.d("IAX2Service", "onStart: host - " + host);
-		Log.d("IAX2Service", "onStart: last_host - " + this.last_host);
+		Log.d("IAX2Service", "onStart: last_host - " + this.lastHost);
 		Log.d("IAX2Service", "onStart: username - " + username);
-		Log.d("IAX2Service", "onStart: last_username - " + this.last_username);
+		Log.d("IAX2Service", "onStart: last_username - " + this.lastUsername);
 		Log.d("IAX2Service", "onStart: password - " + password);
-		Log.d("IAX2Service", "onStart: last_password - " + this.last_password);
+		Log.d("IAX2Service", "onStart: last_password - " + this.lastPassword);
 
 		/* If there is no host set, or the host changed, kill off the binder. */
-		if (host.equals("") || !host.equals(this.last_host)) {
+		if (host.equals("") || !host.equals(this.lastHost)) {
 			if (this.binder != null) {
 				this.binder.stop();
 				this.binder = null;
@@ -118,17 +106,17 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 		/* Start the binder if we have not done so already. */
 		try {
 			if (this.binder == null) {
-				this.binder = new BinderSE(host, this.audio_interface);
-				this.last_host = host;
-				this.last_username = "";
-				this.last_password = "";
+				this.binder = new BinderSE(host, this.audioInterface);
+				this.lastHost = host;
+				this.lastUsername = "";
+				this.lastPassword = "";
 			}
 		} catch (final SocketException e) {
 			e.printStackTrace();
 		}
 
-		if (username.equals(this.last_username)
-				&& password.equals(this.last_password) && this.register_sent) {
+		if (username.equals(this.lastUsername)
+				&& password.equals(this.lastPassword) && this.registerSent) {
 			return;
 		}
 
@@ -136,15 +124,26 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 			if (this.registered) {
 				this.binder.unregister(this);
 				this.registered = false;
-				this.register_sent = false;
+				this.registerSent = false;
 			}
 			this.binder.register(username, password, this, true);
-			this.last_username = username;
-			this.last_password = password;
-			this.register_sent = true;
+			this.lastUsername = username;
+			this.lastPassword = password;
+			this.registerSent = true;
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Called due to a call to startService().
+	 * 
+	 * @see android.app.Service#onStart(android.content.Intent, int)
+	 */
+	@Override
+	public void onStart(Intent arg0, int start_id) {
+		/* This shouldn't be called. */
+		Log.e("IAX2Service", "onStart() called unexpectedly.");
 	}
 
 	/**
@@ -160,7 +159,7 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 			if (this.registered) {
 				this.binder.unregister(this);
 				this.registered = false;
-				this.register_sent = false;
+				this.registerSent = false;
 			}
 			this.binder.stop();
 			this.binder = null;
@@ -207,7 +206,7 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 						.currentTimeMillis());
 
 		notification.setLatestEventInfo(this, getString(R.string.app_name)
-				+ " " + mText, f.getStatus(), pendingIntent);
+				+ " " + mText, f != null ? f.getStatus() : "", pendingIntent);
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		notificationManager.notify(0, notification);
 
@@ -237,7 +236,7 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 	 * 
 	 * @return String configuration value
 	 */
-	private String get_config_param(String arg) {
+	private String getConfigParam(String arg) {
 		return getSharedPreferences(Settings.PREFS_FILE, MODE_PRIVATE)
 				.getString(arg, "");
 	}

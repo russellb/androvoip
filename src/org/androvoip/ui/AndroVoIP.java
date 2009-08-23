@@ -22,36 +22,47 @@
 package org.androvoip.ui;
 
 import org.androvoip.R;
+import org.androvoip.iax2.IAX2ServiceAPI;
 
 import android.app.TabActivity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 
-public class AndroVoIP extends TabActivity implements OnTabChangeListener {
+public class AndroVoIP extends TabActivity implements OnTabChangeListener,
+		ServiceConnection {
+	static final String DIALER_TAB = "dialer_tab";
+	static final String STATUS_TAB = "status_tab";
+	private IAX2ServiceAPI serviceConnection = null;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
 		final TabHost tab_host = getTabHost();
-		tab_host.addTab(tab_host.newTabSpec("dialer_tab")
-				.setIndicator("Dialer",
-					this.getResources().getDrawable(R.drawable.ic_tab_call))
+		tab_host.addTab(tab_host.newTabSpec(DIALER_TAB).setIndicator("Dialer",
+				this.getResources().getDrawable(R.drawable.ic_tab_call))
 				.setContent(R.id.dialer));
-		tab_host.addTab(tab_host.newTabSpec("status_tab")
-				.setIndicator("Status",
-					this.getResources().getDrawable(R.drawable.ic_tab_info_details))
-				.setContent(R.id.status));
+		tab_host.addTab(tab_host.newTabSpec(STATUS_TAB)
+				.setIndicator(
+						"Status",
+						this.getResources().getDrawable(
+								R.drawable.ic_tab_info_details)).setContent(
+						R.id.status));
 		tab_host.setCurrentTab(0);
 		tab_host.setOnTabChangedListener(this);
 
-		startService(new Intent().setClassName("org.androvoip",
-				"org.androvoip.iax2.IAX2Service"));
+		bindService(new Intent().setClassName("org.androvoip",
+				"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
 	}
 
 	@Override
@@ -78,7 +89,36 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener {
 		return false;
 	}
 
+	private void statusTabActive() {
+		Log.d("AndroVoIP", "status tab is active.");
+
+		if (serviceConnection == null) {
+			bindService(new Intent().setClassName("org.androvoip",
+					"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
+
+			return;
+		}
+
+		try {
+			Log.d("AndroVoIP", "Registration status is: "
+					+ serviceConnection.getRegistrationStatus());
+		} catch (RemoteException e) {
+			/* Connection Lost. */
+			e.printStackTrace();
+		}
+	}
+
 	public void onTabChanged(String arg0) {
-		Log.d("AndroVoIP", "Tab selected: " + arg0);
+		if (arg0.equals(STATUS_TAB)) {
+			statusTabActive();
+		}
+	}
+
+	public void onServiceConnected(ComponentName arg0, IBinder arg1) {
+		serviceConnection = IAX2ServiceAPI.Stub.asInterface(arg1);
+	}
+
+	public void onServiceDisconnected(ComponentName arg0) {
+		serviceConnection = null;
 	}
 }
