@@ -19,6 +19,16 @@
 		</activity>
 		<activity android:name=".ui.About"/>
 		<activity android:name=".ui.Settings"/>
+		<activity
+			android:name=".ui.AndroVoIP">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="iax"/>
+				<data android:scheme="iax2"/>
+			</intent-filter>
+		</activity>
 		<service android:name=".iax2.IAX2Service"/>
 	</application>
 

@@ -28,6 +28,7 @@ import android.app.TabActivity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -46,6 +47,7 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Intent intent = getIntent();
 		setContentView(R.layout.main);
 
 		final TabHost tab_host = getTabHost();
@@ -61,8 +63,16 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 		tab_host.setCurrentTab(0);
 		tab_host.setOnTabChangedListener(this);
 
-		bindService(new Intent().setClassName("org.androvoip",
-				"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
+		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+			Uri data = intent.getData();
+			String scheme = data.getScheme();
+			String path = data.getSchemeSpecificPart();
+
+			Log.d("org.androvoip", "Got a URI: " + scheme + " - " + path);
+		} else {
+			bindService(new Intent().setClassName("org.androvoip",
+					"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
+		}
 	}
 
 	@Override

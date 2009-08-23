@@ -7,22 +7,19 @@
 
 	<ScrollView
 		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent"
-		android:layout_weight="1"> 
+		android:layout_height="fill_parent"> 
 
     	<LinearLayout
 			android:orientation="vertical"
 			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:layout_weight="1">
+			android:layout_height="fill_parent">
 
 		<TextView
 	    	android:text="IAX2 Hostname"
 	    	android:textSize="8pt"
 	    	android:gravity="left"
 	    	android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"
-	    	android:layout_weight="1"/>
+	    	android:layout_height="wrap_content"/>
 
 		<EditText
 			android:id="@+id/host_text"
@@ -30,16 +27,14 @@
 	    	android:gravity="left"
 	    	android:singleLine="true"
 	    	android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"
-	    	android:layout_weight="1"/>
+	    	android:layout_height="wrap_content"/>
 
 		<TextView
 	    	android:text="Username"
 	    	android:textSize="8pt"
 	    	android:gravity="left"
 	    	android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"
-	    	android:layout_weight="1"/>
+	    	android:layout_height="wrap_content"/>
 
 		<EditText
 	        android:id="@+id/username_text"
@@ -47,16 +42,14 @@
 	    	android:gravity="left"
 	    	android:singleLine="true"
 	    	android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"
-	    	android:layout_weight="1"/>
+	    	android:layout_height="wrap_content"/>
 
 		<TextView
 	    	android:text="Password"
 	    	android:textSize="8pt"
 	    	android:gravity="left"
 	    	android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"
-	    	android:layout_weight="1"/>
+	    	android:layout_height="wrap_content"/>
 
 		<EditText
         	android:id="@+id/password_text"
@@ -65,8 +58,7 @@
 	    	android:password="true"
 	    	android:singleLine="true"
 	    	android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"
-	    	android:layout_weight="1"/>
+	    	android:layout_height="wrap_content"/>
 	    </LinearLayout>
 	</ScrollView>
 
