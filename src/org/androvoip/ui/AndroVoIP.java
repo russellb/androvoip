@@ -79,8 +79,10 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 	public void onDestroy() {
 		super.onDestroy();
 
-		unbindService(this);
-		this.serviceConnection = null;
+		if (this.serviceConnection != null) {
+			unbindService(this);
+			this.serviceConnection = null;
+		}
 	}
 	
 	@Override
