@@ -113,9 +113,9 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 		Log.d("AndroVoIP", "status tab is active.");
 
 		if (serviceConnection == null) {
+			Log.e("AndroVoIP", "Connection to IAX2Service not present when status tab became active.");
 			bindService(new Intent().setClassName("org.androvoip",
 					"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
-
 			return;
 		}
 

@@ -31,6 +31,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -83,6 +84,7 @@ public class Settings extends Activity implements OnClickListener,
 				getStringById(R.id.password_text)).commit();
 
 		if (this.serviceConnection == null) {
+			Log.e("AndroVoIP", "Connection to IAX2Service not present when saving config.");
 			bindService(new Intent().setClassName("org.androvoip",
 					"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
 			return;
