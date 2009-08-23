@@ -61,8 +61,10 @@ public class Settings extends Activity implements OnClickListener,
 	public void onDestroy() {
 		super.onDestroy();
 
-		unbindService(this);
-		this.serviceConnection = null;
+		if (this.serviceConnection != null) {
+			unbindService(this);
+			this.serviceConnection = null;
+		}
 	}
 
 	private void setField(int id, String key) {
