@@ -77,17 +77,16 @@ public class Settings extends Activity implements OnClickListener,
 	}
 
 	private void buttonSave() {
-		if (this.serviceConnection == null) {
-			bindService(new Intent().setClassName("org.androvoip",
-					"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
-
-			return;
-		}
-
 		getSharedPreferences(PREFS_FILE, MODE_PRIVATE).edit().putString("host",
 				getStringById(R.id.host_text)).putString("username",
 				getStringById(R.id.username_text)).putString("password",
 				getStringById(R.id.password_text)).commit();
+
+		if (this.serviceConnection == null) {
+			bindService(new Intent().setClassName("org.androvoip",
+					"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
+			return;
+		}
 
 		try {
 			this.serviceConnection.refreshIAX2Registration();
