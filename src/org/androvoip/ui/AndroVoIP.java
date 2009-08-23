@@ -66,6 +66,14 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 	}
 
 	@Override
+	public void onDestroy() {
+		super.onDestroy();
+
+		unbindService(this);
+		this.serviceConnection = null;
+	}
+	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.options_menu, menu);
 		return true;
