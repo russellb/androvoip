@@ -35,11 +35,15 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.TabHost.OnTabChangeListener;
 
 public class AndroVoIP extends TabActivity implements OnTabChangeListener,
-		ServiceConnection {
+		ServiceConnection, OnClickListener {
 	static final String DIALER_TAB = "dialer_tab";
 	static final String STATUS_TAB = "status_tab";
 	private IAX2ServiceAPI serviceConnection = null;
@@ -73,6 +77,8 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 			bindService(new Intent().setClassName("org.androvoip",
 					"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
 		}
+		
+		((Button) findViewById(R.id.status_refresh)).setOnClickListener(this);
 	}
 
 	@Override
@@ -109,23 +115,13 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 		return false;
 	}
 
+	private void setField(int id, String str) {
+		((TextView) findViewById(id)).setText(str);
+	}
+	
 	private void statusTabActive() {
 		Log.d("AndroVoIP", "status tab is active.");
-
-		if (serviceConnection == null) {
-			Log.e("AndroVoIP", "Connection to IAX2Service not present when status tab became active.");
-			bindService(new Intent().setClassName("org.androvoip",
-					"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
-			return;
-		}
-
-		try {
-			Log.d("AndroVoIP", "Registration status is: "
-					+ serviceConnection.getRegistrationStatus());
-		} catch (RemoteException e) {
-			/* Connection Lost. */
-			e.printStackTrace();
-		}
+		statusRefresh();
 	}
 
 	public void onTabChanged(String arg0) {
@@ -140,5 +136,32 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 
 	public void onServiceDisconnected(ComponentName arg0) {
 		serviceConnection = null;
+	}
+
+	private void statusRefresh() {
+		if (serviceConnection == null) {
+			Log.e("AndroVoIP", "Connection to IAX2Service not present for status refresh.");
+			bindService(new Intent().setClassName("org.androvoip",
+					"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
+			return;
+		}
+
+		try {
+			final boolean regStatus = serviceConnection.getRegistrationStatus();
+			
+			setField(R.id.status_text, "Registration: " +
+						(regStatus ? "Registered" : "Not Registered"));
+			
+			Log.d("AndroVoIP", "Registration status is: " + regStatus);
+		} catch (RemoteException e) {
+			/* Connection Lost. */
+			e.printStackTrace();
+		}
+	}
+	
+	public void onClick(View v) {
+		if (v == findViewById(R.id.status_refresh)) {
+			statusRefresh();
+		}
 	}
 }
