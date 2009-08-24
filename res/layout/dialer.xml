@@ -5,8 +5,17 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 
-	<TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" 
-		android:text="Dialer" />
+	<EditText 
+		android:text="Phone Number" 
+		android:id="@+id/dialer_number" 
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"/>
+		
+	<Button 
+		android:text="Send" 
+		android:id="@+id/send_button" 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:gravity="left"/>
+
 </LinearLayout>

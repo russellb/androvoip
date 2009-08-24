@@ -38,6 +38,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.TabHost.OnTabChangeListener;
@@ -79,6 +80,9 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 		}
 		
 		((Button) findViewById(R.id.status_refresh)).setOnClickListener(this);
+		((Button) findViewById(R.id.send_button)).setOnClickListener(this);
+		
+		((EditText) findViewById(R.id.dialer_number)).selectAll();
 	}
 
 	@Override
@@ -159,9 +163,19 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 		}
 	}
 	
+	private String getStringById(int id) {
+		return ((EditText) findViewById(id)).getText().toString();
+	}
+
+	private void dialNumber() {
+		Log.i("AndroVoIP", "Request to dial number: " + getStringById(R.id.dialer_number));
+	}
+	
 	public void onClick(View v) {
 		if (v == findViewById(R.id.status_refresh)) {
 			statusRefresh();
+		} else if (v == findViewById(R.id.send_button)) {
+			dialNumber();
 		}
 	}
 }
