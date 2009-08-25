@@ -52,7 +52,7 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Intent intent = getIntent();
+		final Intent intent = getIntent();
 		setContentView(R.layout.main);
 
 		final TabHost tab_host = getTabHost();
@@ -60,28 +60,26 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 				this.getResources().getDrawable(R.drawable.ic_tab_call))
 				.setContent(R.id.dialer));
 		tab_host.addTab(tab_host.newTabSpec(STATUS_TAB)
-				.setIndicator(
-						"Status",
-						this.getResources().getDrawable(
-								R.drawable.ic_tab_info_details)).setContent(
-						R.id.status));
+				.setIndicator("Status", this.getResources()
+				.getDrawable(R.drawable.ic_tab_info_details))
+				.setContent(R.id.status));
 		tab_host.setCurrentTab(0);
 		tab_host.setOnTabChangedListener(this);
 
 		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-			Uri data = intent.getData();
-			String scheme = data.getScheme();
-			String path = data.getSchemeSpecificPart();
+			final Uri data = intent.getData();
+			final String scheme = data.getScheme();
+			final String path = data.getSchemeSpecificPart();
 
 			Log.d("org.androvoip", "Got a URI: " + scheme + " - " + path);
-		} 
-		
+		}
+
 		bindService(new Intent().setClassName("org.androvoip",
 				"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
-		
+
 		((Button) findViewById(R.id.status_refresh)).setOnClickListener(this);
 		((Button) findViewById(R.id.send_button)).setOnClickListener(this);
-		
+
 		((EditText) findViewById(R.id.dialer_number)).selectAll();
 	}
 
@@ -94,7 +92,7 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 			this.serviceConnection = null;
 		}
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.options_menu, menu);
@@ -122,7 +120,7 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 	private void setField(int id, String str) {
 		((TextView) findViewById(id)).setText(str);
 	}
-	
+
 	private void statusTabActive() {
 		Log.d("AndroVoIP", "status tab is active.");
 		statusRefresh();
@@ -135,42 +133,45 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 	}
 
 	public void onServiceConnected(ComponentName arg0, IBinder arg1) {
-		serviceConnection = IAX2ServiceAPI.Stub.asInterface(arg1);
+		this.serviceConnection = IAX2ServiceAPI.Stub.asInterface(arg1);
 	}
 
 	public void onServiceDisconnected(ComponentName arg0) {
-		serviceConnection = null;
+		this.serviceConnection = null;
 	}
 
 	private void statusRefresh() {
-		if (serviceConnection == null) {
-			Log.e("AndroVoIP", "Connection to IAX2Service not present for status refresh.");
+		if (this.serviceConnection == null) {
+			Log.e("AndroVoIP",
+				"Connection to IAX2Service not present for status refresh.");
 			bindService(new Intent().setClassName("org.androvoip",
 					"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
 			return;
 		}
 
 		try {
-			final boolean regStatus = serviceConnection.getRegistrationStatus();
-			
-			setField(R.id.status_text, "Registration: " +
-						(regStatus ? "Registered" : "Not Registered"));
-			
+			final boolean regStatus = this.serviceConnection
+					.getRegistrationStatus();
+
+			setField(R.id.status_text, "Registration: "
+					+ (regStatus ? "Registered" : "Not Registered"));
+
 			Log.d("AndroVoIP", "Registration status is: " + regStatus);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			/* Connection Lost. */
 			e.printStackTrace();
 		}
 	}
-	
+
 	private String getStringById(int id) {
 		return ((EditText) findViewById(id)).getText().toString();
 	}
 
 	private void dialNumber() {
-		Log.i("AndroVoIP", "Request to dial number: " + getStringById(R.id.dialer_number));
+		Log.i("AndroVoIP", "Request to dial number: "
+				+ getStringById(R.id.dialer_number));
 	}
-	
+
 	public void onClick(View v) {
 		if (v == findViewById(R.id.status_refresh)) {
 			statusRefresh();
