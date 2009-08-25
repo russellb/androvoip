@@ -74,10 +74,10 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 			String path = data.getSchemeSpecificPart();
 
 			Log.d("org.androvoip", "Got a URI: " + scheme + " - " + path);
-		} else {
-			bindService(new Intent().setClassName("org.androvoip",
-					"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
-		}
+		} 
+		
+		bindService(new Intent().setClassName("org.androvoip",
+				"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
 		
 		((Button) findViewById(R.id.status_refresh)).setOnClickListener(this);
 		((Button) findViewById(R.id.send_button)).setOnClickListener(this);
