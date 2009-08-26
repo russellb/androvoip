@@ -19,7 +19,9 @@
 
 package com.mexuar.corraleta.protocol;
 
-import org.bouncycastle.crypto.digests.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import com.mexuar.corraleta.audio.*;
 import com.mexuar.corraleta.util.*;
 
@@ -536,17 +538,17 @@ public class ProtocolControlFrame
 
             int model = iep.authmethods.intValue();
             if ( (model & 2) > 0) {
+            	// do md5
 
-                MD5Digest md = new MD5Digest();
-                byte[] by = _iep.challenge.getBytes();
-                md.update(by, 0, by.length);
-                by = pass.getBytes();
-                md.update(by, 0, by.length);
-                byte[] resp = new byte[16];
-                md.doFinal(resp, 0);
-                String p = Binder.enHex(resp, (Character)null);
-                nip.md5Result = p;
-                // do md5
+				try {
+					final MessageDigest digest = MessageDigest.getInstance("MD5");
+					digest.update(_iep.challenge.getBytes());
+					digest.update(pass.getBytes());	                
+					nip.md5Result = Binder.enHex(digest.digest(), null);
+				} catch (NoSuchAlgorithmException e) {
+					android.util.Log.e("IAX2", "MD5 not supported.");
+					e.printStackTrace();
+				}  
             }
             else if ( (model & 1) > 0) {
                 // do plaintext
