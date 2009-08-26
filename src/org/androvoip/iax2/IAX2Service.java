@@ -48,6 +48,7 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 	private String lastUsername = "";
 	private String lastPassword = "";
 	private BinderSE binder = null;
+	private Friend friend = null;
 	private boolean registered = false;
 	private boolean registerSent = false;
 	private AndroidAudioInterface audioInterface = null;
@@ -211,6 +212,12 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 		notificationManager.notify(0, notification);
 
 		this.registered = s;
+		if (s) {
+			this.friend = f;
+		} else if (this.friend != null) {
+			this.friend.stop();
+			this.friend = null;
+		}
 	}
 
 	/**
