@@ -86,6 +86,17 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 
 			return true;
 		}
+
+		public boolean hangup() throws RemoteException {
+			if (IAX2Service.this.call == null) {
+				Log.w("IAX2Service", "Can not hang up, no call");
+				return false;
+			}
+			
+			IAX2Service.this.call.hangup();
+			
+			return true;
+		}
 	};
 
 	/**

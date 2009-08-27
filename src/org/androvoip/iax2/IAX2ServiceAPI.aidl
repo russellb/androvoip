@@ -27,4 +27,6 @@ interface IAX2ServiceAPI {
 	void refreshIAX2Registration();
 	
 	boolean dial(String num);
+	
+	boolean hangup();
 }
