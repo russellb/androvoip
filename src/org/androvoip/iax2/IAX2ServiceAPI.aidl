@@ -25,4 +25,6 @@ interface IAX2ServiceAPI {
 	boolean getRegistrationStatus();
 	
 	void refreshIAX2Registration();
+	
+	boolean dial(String num);
 }

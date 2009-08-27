@@ -65,15 +65,7 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 				.setContent(R.id.status));
 		tab_host.setCurrentTab(0);
 		tab_host.setOnTabChangedListener(this);
-
-		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-			final Uri data = intent.getData();
-			final String scheme = data.getScheme();
-			final String path = data.getSchemeSpecificPart();
-
-			Log.d("org.androvoip", "Got a URI: " + scheme + " - " + path);
-		}
-
+		
 		bindService(new Intent().setClassName("org.androvoip",
 				"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
 
@@ -81,6 +73,16 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 		((Button) findViewById(R.id.send_button)).setOnClickListener(this);
 
 		((EditText) findViewById(R.id.dialer_number)).selectAll();
+
+		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+			final Uri data = intent.getData();
+			final String scheme = data.getScheme();
+			final String path = data.getSchemeSpecificPart();
+
+			Log.d("org.androvoip", "Got a URI: " + scheme + " - " + path);
+			
+			/* TODO Parse the URI.  Does the IAX2 stack have a method for this? */
+		}
 	}
 
 	@Override
@@ -168,8 +170,18 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 	}
 
 	private void dialNumber() {
-		Log.i("AndroVoIP", "Request to dial number: "
-				+ getStringById(R.id.dialer_number));
+		final String num = getStringById(R.id.dialer_number);
+		boolean call_result;
+		
+		try {
+			call_result = this.serviceConnection.dial(num);
+		} catch (RemoteException e) {
+			call_result = false;
+			e.printStackTrace();
+		}
+		
+		Log.i("AndroVoIP", "Request to dial number: " + num + " was " +
+				(call_result ? "Successful" : "not Successful"));
 	}
 
 	public void onClick(View v) {

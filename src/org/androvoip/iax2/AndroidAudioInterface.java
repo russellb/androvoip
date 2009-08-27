@@ -247,9 +247,11 @@ public class AndroidAudioInterface implements AudioInterface {
 	 */
 	public void stopRec() {
 		try {
-			final Thread t = this.rec_thread;
-			this.rec_thread = null;
-			t.join();
+			if (this.rec_thread != null) {
+				final Thread t = this.rec_thread;
+				this.rec_thread = null;
+				t.join();
+			}
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -19,6 +19,12 @@
  * along with AndroVoIP.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * TODO Investigate handling of calls that end in receiving a REJECT.
+ *      It does not appear that we get any notification from the stack
+ *      when this happens.
+ */
+
 package org.androvoip.iax2;
 
 import java.net.SocketException;
@@ -49,6 +55,7 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 	private String lastPassword = "";
 	private BinderSE binder = null;
 	private Friend friend = null;
+	private Call call = null;
 	private boolean registered = false;
 	private boolean registerSent = false;
 	private AndroidAudioInterface audioInterface = null;
@@ -60,6 +67,24 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 
 		public void refreshIAX2Registration() throws RemoteException {
 			IAX2Service.this.refreshIAX2Binder();
+		}
+
+		public boolean dial(String num) throws RemoteException {
+			if (IAX2Service.this.call != null) {
+				Log.w("IAX2Service", "Can not dial, call in progress");
+				return false;
+			}
+
+			if (IAX2Service.this.friend == null) {
+				Log.w("IAX2Service", "Can not dial, not registered");
+				return false;
+			}
+
+			IAX2Service.this.call = IAX2Service.this.friend.newCall(
+					IAX2Service.this.lastUsername,
+					IAX2Service.this.lastPassword, num, "", "");
+
+			return true;
 		}
 	};
 
@@ -173,21 +198,25 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 	 * @see com.mexuar.corraleta.protocol.ProtocolEventListener#answered(com.mexuar.corraleta.protocol.Call)
 	 */
 	public void answered(Call c) {
-		// TODO Auto-generated method stub
+		Log.i("IAX2Service", "Call has been answered: " + c.toString());
 	}
 
 	/**
 	 * @see com.mexuar.corraleta.protocol.ProtocolEventListener#hungUp(com.mexuar.corraleta.protocol.Call)
 	 */
 	public void hungUp(Call c) {
-		// TODO Auto-generated method stub
+		Log.i("IAX2Service", "Call hung up: " + c.toString());
+		if (this.call == c) {
+			this.call = null;
+		}
 	}
 
 	/**
 	 * @see com.mexuar.corraleta.protocol.ProtocolEventListener#newCall(com.mexuar.corraleta.protocol.Call)
 	 */
 	public void newCall(Call c) {
-		// TODO Auto-generated method stub
+		this.call = c;
+		Log.i("IAX2Service", "New call: " + this.call.toString());
 	}
 
 	/**
@@ -224,7 +253,7 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 	 * @see com.mexuar.corraleta.protocol.ProtocolEventListener#ringing(com.mexuar.corraleta.protocol.Call)
 	 */
 	public void ringing(Call c) {
-		// TODO Auto-generated method stub
+		Log.i("IAX2Service", "Call is ringing: " + c.toString());
 	}
 
 	/**
