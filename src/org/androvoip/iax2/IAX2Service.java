@@ -261,7 +261,9 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 	 *      boolean, int)
 	 */
 	public void setHostReachable(Friend f, boolean b, int roundtrip) {
-		// TODO Auto-generated method stub
+		Log.i("IAX2Service", "Host: " + f.toString() +
+				"Reachable: " + (b ? "Yes " : "No") +
+				"RTT: " + new Integer(roundtrip).toString());
 	}
 
 	/**
