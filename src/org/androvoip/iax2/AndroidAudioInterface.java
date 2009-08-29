@@ -26,8 +26,9 @@ package org.androvoip.iax2;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -43,7 +44,9 @@ public class AndroidAudioInterface implements AudioInterface {
 	/* Data for the receive path */
 	private AudioTrack track = null;
 	private Thread play_thread = null;
-	private Queue<byte[]> playQ = new LinkedList<byte[]>();
+	private List<short[]> playQ = Collections.synchronizedList(new LinkedList<short[]>());
+	private static final int UNUSED_CACHE_MAX = 10;
+	private List<short[]> unusedQ = Collections.synchronizedList(new LinkedList<short[]>());
 
 	/* Data for the transmit path */
 	private AudioSender as = null;
@@ -175,7 +178,7 @@ public class AndroidAudioInterface implements AudioInterface {
 		}
 	}
 
-	private void writeBuff(byte[] buf) {
+	private void writeBuff(short[] buf) {
 		if (this.track == null) {
 			Log.w("IAX2Audio", "write() without an AudioTrack");
 			return;
@@ -202,10 +205,14 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	private void playbackTime() {
-		byte[] buf;
+		short[] buf;
 
-		while ((buf = this.playQ.poll()) != null) {
+		while (this.playQ.isEmpty() == false && (buf = this.playQ.remove(0)) != null) {
 			writeBuff(buf);
+			if (this.unusedQ.size() < AndroidAudioInterface.UNUSED_CACHE_MAX) {
+				/* Cache a max of 10 buffers */
+				this.unusedQ.add(buf);
+			}
 		}
 	}
 
@@ -400,9 +407,32 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#write(byte[], long)
 	 */
 	public void write(byte[] buf, long timestamp) throws IOException {
-		byte[] qBuf = new byte[buf.length];
-		System.arraycopy(buf, 0, qBuf, 0, buf.length);
-		this.playQ.offer(qBuf);
+		short[] qBuf = null;
+		
+		/* Try to used a cached buffer if we can */
+		
+		while (qBuf == null && this.unusedQ.isEmpty() == false) {
+			qBuf = this.unusedQ.remove(0);
+			if (qBuf.length != buf.length / 2) {
+				qBuf = null;
+			}
+		}
+		
+		if (qBuf == null) {
+			/* Did not find a suitable cached buffer */
+			Log.d("IAX2Audio", "unused buffer cache miss");
+			qBuf = new short[buf.length / 2];
+		}
+		
+		for (int i = 0, curs = 0; i < buf.length; i++) {
+			if ((i & 1) == 0) {
+				qBuf[curs] = (short) (buf[i] << 8);
+			} else {
+				qBuf[curs] |= (buf[i]);
+				curs++;
+			}
+		}
+		this.playQ.add(qBuf);
 	}
 
 	/**
