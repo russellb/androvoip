@@ -11,23 +11,24 @@
 		android:layout_width="fill_parent" 
 		android:layout_height="wrap_content"/>
 	
-	<TableLayout
+	<FrameLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content">
 		
-	<Button 
-		android:text="Send" 
-		android:id="@+id/send_button" 
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content"
-		android:gravity="left"/>
-
-	<Button 
-		android:text="Hangup" 
-		android:id="@+id/hangup_button" 
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content"
-		android:gravity="right"/>
-	</TableLayout>
-
+		<Button 
+			android:text="Send" 
+			android:id="@+id/send_button" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_gravity="left"/>
+	
+		<Button 
+			android:text="Hangup" 
+			android:id="@+id/hangup_button" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_gravity="right"/>
+			
+	</FrameLayout>
+	
 </LinearLayout>
