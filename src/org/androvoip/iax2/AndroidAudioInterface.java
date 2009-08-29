@@ -226,7 +226,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#startRinging()
 	 */
 	public void startRinging() {
-		// TODO Auto-generated method stub
+		Log.d("IAX2Audio", "startRinging()");
 	}
 
 	/**
@@ -235,7 +235,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#stopPlay()
 	 */
 	public void stopPlay() {
-		// TODO Auto-generated method stub
+		Log.d("IAX2Audio", "stopPlay()");
 	}
 
 	/**
