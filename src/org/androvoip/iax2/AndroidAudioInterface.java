@@ -265,7 +265,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#stopRinging()
 	 */
 	public void stopRinging() {
-		// TODO Auto-generated method stub
+		Log.d("IAX2Audio", "stopRinging()");
 	}
 
 	/**
