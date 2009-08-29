@@ -10,6 +10,10 @@
 		android:id="@+id/dialer_number" 
 		android:layout_width="fill_parent" 
 		android:layout_height="wrap_content"/>
+	
+	<TableLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
 		
 	<Button 
 		android:text="Send" 
@@ -17,5 +21,13 @@
 		android:layout_width="wrap_content" 
 		android:layout_height="wrap_content"
 		android:gravity="left"/>
+
+	<Button 
+		android:text="Hangup" 
+		android:id="@+id/hangup_button" 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:gravity="right"/>
+	</TableLayout>
 
 </LinearLayout>

@@ -71,7 +71,8 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 
 		((Button) findViewById(R.id.status_refresh)).setOnClickListener(this);
 		((Button) findViewById(R.id.send_button)).setOnClickListener(this);
-
+		((Button) findViewById(R.id.hangup_button)).setOnClickListener(this);
+		
 		((EditText) findViewById(R.id.dialer_number)).selectAll();
 
 		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
@@ -175,7 +176,7 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 		
 		try {
 			call_result = this.serviceConnection.dial(num);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			call_result = false;
 			e.printStackTrace();
 		}
@@ -184,11 +185,21 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 				(call_result ? "Successful" : "not Successful"));
 	}
 
+	private void hangupCall() {
+		try {
+			this.serviceConnection.hangup();
+		} catch (final RemoteException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void onClick(View v) {
 		if (v == findViewById(R.id.status_refresh)) {
 			statusRefresh();
 		} else if (v == findViewById(R.id.send_button)) {
 			dialNumber();
+		} else if (v == findViewById(R.id.hangup_button)) {
+			hangupCall();
 		}
 	}
 }
