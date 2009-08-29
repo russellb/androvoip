@@ -35,8 +35,8 @@ import com.mexuar.corraleta.protocol.AudioSender;
 import com.mexuar.corraleta.protocol.VoiceFrame;
 
 public class AndroidAudioInterface implements AudioInterface {
-	private AudioSender as;
-	private Thread rec_thread;
+	private AudioSender as = null;
+	private Thread rec_thread = null;
 
 	/**
 	 * Audio properties have changed.
@@ -46,7 +46,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#changedProps()
 	 */
 	public void changedProps() {
-		Log.e("AndroidAudioInterface", "changedProps() got called.");
+		Log.e("IAX2Audio", "changedProps() got called.");
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#playAudioStream(java.io.InputStream)
 	 */
 	public void playAudioStream(InputStream in) throws IOException {
-		Log.e("AndroidAudioInterface", "playAudioStream() got called");
+		Log.e("IAX2Audio", "playAudioStream() got called");
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#readDirect(byte[])
 	 */
 	public long readDirect(byte[] buff) throws IOException {
-		Log.e("AndroidAudioInterface", "readDirect() got called");
+		Log.e("IAX2Audio", "readDirect() got called");
 		return 0;
 	}
 
@@ -179,7 +179,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#sampleRecord(com.mexuar.corraleta.audio.SampleListener)
 	 */
 	public void sampleRecord(SampleListener list) throws IOException {
-		Log.e("AndroidAudioInterface", "sampleRecord() got called");
+		Log.e("IAX2Audio", "sampleRecord() got called");
 	}
 
 	/**
@@ -207,7 +207,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#startPlay()
 	 */
 	public void startPlay() {
-		Log.e("AndroidAudioInterface", "startPlay() got called");
+		Log.e("IAX2Audio", "startPlay() got called");
 	}
 
 	/**
@@ -216,7 +216,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#startRec()
 	 */
 	public long startRec() {
-		// TODO Auto-generated method stub
+		Log.d("IAX2Audio", "startRec()");
 		return 0;
 	}
 
@@ -298,6 +298,6 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#writeDirect(byte[])
 	 */
 	public void writeDirect(byte[] buff) throws IOException {
-		Log.e("AndroidAudioInterface", "writeDirect() got called");
+		Log.e("IAX2Audio", "writeDirect() got called");
 	}
 }
