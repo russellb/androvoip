@@ -117,6 +117,7 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 	}
 
 	private synchronized void refreshIAX2Binder() {
+		/// TODO: Use Account class for settings.
 		final String host = getConfigParam("host");
 		final String username = getConfigParam("username");
 		final String password = getConfigParam("password");

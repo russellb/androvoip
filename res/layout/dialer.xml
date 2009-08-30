@@ -8,6 +8,7 @@
 	<EditText 
 		android:text="Phone Number" 
 		android:id="@+id/dialer_number" 
+		android:singleLine="true"
 		android:layout_width="fill_parent" 
 		android:layout_height="wrap_content"/>
 	

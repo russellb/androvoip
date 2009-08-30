@@ -22,6 +22,7 @@
 package org.androvoip.ui;
 
 import org.androvoip.R;
+import org.androvoip.Account;
 import org.androvoip.iax2.IAX2ServiceAPI;
 
 import android.app.Activity;
@@ -34,25 +35,47 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 public class Settings extends Activity implements OnClickListener,
 		ServiceConnection {
 	public static final String PREFS_FILE = "AndroVoIP_settings";
 	private IAX2ServiceAPI serviceConnection = null;
+	private Account mAccount;
+	private String[] mProtocols = new String[] { "None", "IAX2" };
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
 
-		((Button) findViewById(R.id.settings_save)).setOnClickListener(this);
-		((Button) findViewById(R.id.settings_cancel)).setOnClickListener(this);
+		Intent intent = getIntent();
+		mAccount = (Account)intent.getSerializableExtra("account");
+		if (mAccount == null) {
+			finish();
+		}
 
-		setField(R.id.host_text, "host");
-		setField(R.id.username_text, "username");
-		setField(R.id.password_text, "password");
+		((Button) findViewById(R.id.save)).setOnClickListener(this);
+		((Button) findViewById(R.id.cancel)).setOnClickListener(this);
+
+		ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,
+		        android.R.layout.simple_spinner_item, mProtocols);
+		spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		((Spinner) findViewById(R.id.protocol_spinner)).setAdapter(spinnerArrayAdapter);
+		
+		for (int i = 0; i < mProtocols.length; i++) {
+			if (mProtocols[i].equals(mAccount.getProtocol().toString())) {
+				((Spinner) findViewById(R.id.protocol_spinner)).setSelection(i);
+				break;
+			}
+		}
+		
+		setField(R.id.host_text, mAccount.getHost());
+		setField(R.id.username_text, mAccount.getUserName());
+		setField(R.id.password_text, mAccount.getPassword());
 
 		bindService(new Intent().setClassName("org.androvoip",
 				"org.androvoip.iax2.IAX2Service"), this, BIND_AUTO_CREATE);
@@ -69,8 +92,7 @@ public class Settings extends Activity implements OnClickListener,
 	}
 
 	private void setField(int id, String key) {
-		((EditText) findViewById(id)).setText(getSharedPreferences(PREFS_FILE,
-				MODE_PRIVATE).getString(key, ""));
+		((EditText) findViewById(id)).setText(key);
 	}
 
 	private String getStringById(int id) {
@@ -78,10 +100,11 @@ public class Settings extends Activity implements OnClickListener,
 	}
 
 	private void buttonSave() {
-		getSharedPreferences(PREFS_FILE, MODE_PRIVATE).edit().putString("host",
-				getStringById(R.id.host_text)).putString("username",
-				getStringById(R.id.username_text)).putString("password",
-				getStringById(R.id.password_text)).commit();
+		mAccount.setProtocol(mProtocols[((Spinner) findViewById(R.id.protocol_spinner)).getSelectedItemPosition()]);
+		mAccount.setHost(getStringById(R.id.host_text));
+		mAccount.setUserName(getStringById(R.id.username_text));
+		mAccount.setPassword(getStringById(R.id.password_text));
+		mAccount.save(getSharedPreferences(PREFS_FILE, MODE_PRIVATE));
 
 		if (this.serviceConnection == null) {
 			Log.e("AndroVoIP", "Connection to IAX2Service not present when saving config.");
@@ -106,9 +129,9 @@ public class Settings extends Activity implements OnClickListener,
 	}
 
 	public void onClick(View v) {
-		if (v == findViewById(R.id.settings_save)) {
+		if (v == findViewById(R.id.save)) {
 			buttonSave();
-		} else if (v == findViewById(R.id.settings_cancel)) {
+		} else if (v == findViewById(R.id.cancel)) {
 			buttonCancel();
 		}
 	}

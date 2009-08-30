@@ -2,9 +2,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 	
     <item 
-    	android:id="@+id/settings"
+    	android:id="@+id/accounts"
     	android:icon="@android:drawable/ic_menu_preferences"
-    	android:title="Settings"/>
+    	android:title="Accounts"/>
     <item 
     	android:id="@+id/about"
     	android:icon="@android:drawable/ic_menu_help"

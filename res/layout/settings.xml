@@ -16,15 +16,26 @@
 			android:layout_height="fill_parent">
 
 		<TextView
-	    	android:text="IAX2 Hostname"
-	    	android:textSize="8pt"
-	    	android:gravity="left"
-	    	android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"/>
-
+			android:text="Protocol"
+			android:textSize="8pt"
+			android:gravity="left"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"/>
+		
+		<Spinner android:id="@+id/protocol_spinner"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		
+		<TextView
+			android:text="Hostname"
+			android:textSize="8pt"
+			android:gravity="left"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"/>
+			
 		<EditText
 			android:id="@+id/host_text"
-	    	android:textSize="12pt"
+	    	android:textSize="10pt"
 	    	android:gravity="left"
 	    	android:singleLine="true"
 	    	android:layout_width="fill_parent"
@@ -39,7 +50,7 @@
 
 		<EditText
 	        android:id="@+id/username_text"
-	    	android:textSize="12pt"
+	    	android:textSize="10pt"
 	    	android:gravity="left"
 	    	android:singleLine="true"
 	    	android:layout_width="fill_parent"
@@ -54,13 +65,14 @@
 
 		<EditText
         	android:id="@+id/password_text"
-	    	android:textSize="12pt"
+	    	android:textSize="10pt"
 	    	android:gravity="left"
 	    	android:password="true"
 	    	android:singleLine="true"
 	    	android:layout_width="fill_parent"
 	    	android:layout_height="wrap_content"/>
-	    </LinearLayout>
+	    
+</LinearLayout>
 	</ScrollView>
 
 	<FrameLayout
@@ -69,7 +81,7 @@
 		android:background="#f0f0f0"
 		android:paddingTop="3px">
 		<Button
-		    android:id="@+id/settings_save"
+		    android:id="@+id/save"
 			android:text="Save"
 			android:textSize="12pt"
 	    	android:layout_width="wrap_content"
@@ -77,7 +89,7 @@
 	    	android:layout_gravity="left"/>
 
 		<Button
-		    android:id="@+id/settings_cancel"
+		    android:id="@+id/cancel"
 			android:text="Cancel"
 			android:textSize="12pt"
 			android:layout_width="wrap_content"

@@ -107,9 +107,9 @@ public class AndroVoIP extends TabActivity implements OnTabChangeListener,
 		final Intent i = new Intent();
 
 		switch (item.getItemId()) {
-		case R.id.settings:
+		case R.id.accounts:
 			startActivity(i.setClassName("org.androvoip",
-					"org.androvoip.ui.Settings"));
+					"org.androvoip.ui.Accounts"));
 			break;
 		case R.id.about:
 			startActivity(i.setClassName("org.androvoip",
