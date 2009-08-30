@@ -35,7 +35,9 @@ import org.androvoip.audio.ULAW;
 import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
+import android.media.AudioRecord;
 import android.media.AudioTrack;
+import android.media.MediaRecorder;
 import android.util.Log;
 
 import com.mexuar.corraleta.audio.AudioInterface;
@@ -44,6 +46,10 @@ import com.mexuar.corraleta.protocol.AudioSender;
 import com.mexuar.corraleta.protocol.VoiceFrame;
 
 public class AndroidAudioInterface implements AudioInterface {
+	private static final int SAMPLE_RATE = 8000;
+	private static final int SAMPLES_PER_FRAME = 160;
+	private static final int FRAME_LEN = 20; /* ms */
+	
 	/* Data for the receive path */
 	private AudioTrack track = null;
 	private Thread play_thread = null;
@@ -52,8 +58,11 @@ public class AndroidAudioInterface implements AudioInterface {
 	private List<short[]> unusedQ = Collections.synchronizedList(new LinkedList<short[]>());
 
 	/* Data for the transmit path */
+	private AudioRecord record = null;
 	private AudioSender as = null;
 	private Thread rec_thread = null;
+	private long timestamp = 0;
+	private byte[] ulawBuf = new byte[SAMPLES_PER_FRAME];
 
 	private Context context = null;
 	
@@ -138,7 +147,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#getSampSz()
 	 */
 	public int getSampSz() {
-		return 160;
+		return SAMPLES_PER_FRAME;
 	}
 
 	/**
@@ -161,30 +170,58 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	/**
-	 * called every 20 ms
+	 * Called by com.mexuar.corraleta.protocol.AudioSender
+	 *
+	 * @see com.mexuar.corraleta.audio.AudioInterface#readWithTime(byte[])
 	 */
-	private void frameTime() {
-		if (this.as != null) {
-			try {
-				this.as.send();
-			} catch (final IOException x) {
-				Log.w("AndroidAudioInterface.frameTime()", x.getMessage());
-			}
-		}
+	public long readWithTime(byte[] buff) throws IOException {
+		System.arraycopy(this.ulawBuf, 0, buff, 0, this.ulawBuf.length);
+		
+		this.timestamp += FRAME_LEN;
+		
+		return this.timestamp;
 	}
-
-	/**
-	 * TODO Handle drift, etc.
-	 */
+	
 	private void recTick() {
-		final long delta = 20;
-
+		short[] slinBuf = new short[SAMPLES_PER_FRAME];
+		
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
+		
 		while (this.rec_thread != null) {
-			frameTime();
-			try {
-				Thread.sleep(delta);
-			} catch (final InterruptedException e) {
-				e.printStackTrace();
+			int soFar = 0;
+			boolean error = false;
+			
+			while (soFar < slinBuf.length) {
+				final int res = this.record.read(slinBuf, soFar, slinBuf.length - soFar);
+
+				switch (res) {
+				case AudioTrack.ERROR_INVALID_OPERATION:
+					Log.e("IAX2Audio", "Invalid read()");
+					error = true;
+					break;
+				case AudioTrack.ERROR_BAD_VALUE:
+					Log.e("IAX2Audio", "Bad arguments to read()");
+					error = true;
+					break;
+				}
+				
+				if (error) {
+					break;
+				}
+				
+				soFar += res;
+			}
+			
+			if (error == false) {
+				for (int i = 0; i < slinBuf.length; i++) {
+					this.ulawBuf[i] = ULAW.linear2ulaw(slinBuf[i]);
+				}
+				
+				try {
+					this.as.send();
+				} catch (IOException e) {
+					Log.e("IAX2Audio", "IOError in sending: " + e.getMessage());
+				}
 			}
 		}
 	}
@@ -194,8 +231,6 @@ public class AndroidAudioInterface implements AudioInterface {
 			Log.w("IAX2Audio", "write() without an AudioTrack");
 			return;
 		}
-
-		// Log.d("IAX2Audio", "write() buf of len " + Integer.toString(buf.length));
 
 		int written = 0;
 		while (written < buf.length) {
@@ -227,7 +262,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	private void playTick() {
-		final long delta = 20;
+		final long delta = FRAME_LEN;
 
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
 		
@@ -239,15 +274,6 @@ public class AndroidAudioInterface implements AudioInterface {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	/**
-	 * Called by com.mexuar.corraleta.protocol.AudioSender
-	 *
-	 * @see com.mexuar.corraleta.audio.AudioInterface#readWithTime(byte[])
-	 */
-	public long readWithTime(byte[] buff) throws IOException {
-		return 0;
 	}
 
 	/**
@@ -269,6 +295,24 @@ public class AndroidAudioInterface implements AudioInterface {
 
 		/* Set up audio recording (transmit) */
 
+		final int minRecBuffer = AudioRecord.getMinBufferSize(
+				SAMPLE_RATE,
+				AudioFormat.CHANNEL_CONFIGURATION_MONO,
+				AudioFormat.ENCODING_PCM_16BIT);
+		
+		try {
+			this.record = new AudioRecord(MediaRecorder.AudioSource.MIC,
+					SAMPLE_RATE,
+					AudioFormat.CHANNEL_CONFIGURATION_MONO,
+					AudioFormat.ENCODING_PCM_16BIT,
+					(1600 > minRecBuffer) ? 1600 : minRecBuffer);
+			
+			this.record.startRecording();
+		} catch (IllegalArgumentException e) {
+			Log.e("IAX2Audio", "Failed to create AudioRecord: " +
+					e.getMessage());
+		}
+		
 		final Runnable trec = new Runnable() {
 			public void run() {
 				recTick();
@@ -284,16 +328,17 @@ public class AndroidAudioInterface implements AudioInterface {
 			Log.w("IAX2Audio", "track not null in setAudioSender()");
 		}
 
-		final int minBuffer = AudioTrack.getMinBufferSize(8000,
+		final int minPlayBuffer = AudioTrack.getMinBufferSize(
+								SAMPLE_RATE,
 								AudioFormat.CHANNEL_CONFIGURATION_MONO,
 								AudioFormat.ENCODING_PCM_16BIT);
 
 		try {
 			this.track = new AudioTrack(AudioManager.STREAM_VOICE_CALL,
-								8000, /* 8 kHz sample rate */
+								SAMPLE_RATE,
 								AudioFormat.CHANNEL_CONFIGURATION_MONO,
 								AudioFormat.ENCODING_PCM_16BIT,
-								(640 > minBuffer) ? 640 : minBuffer,
+								(640 > minPlayBuffer) ? 640 : minPlayBuffer,
 								AudioTrack.MODE_STREAM);
 		} catch (final IllegalArgumentException e) {
 			Log.e("IAX2Audio", "Failed to create AudioTrack");
@@ -355,8 +400,8 @@ public class AndroidAudioInterface implements AudioInterface {
 	public void stopPlay() {
 		Log.d("IAX2Audio", "stopPlay()");
 
-		if (track != null) {
-			track.stop();
+		if (this.track != null) {
+			this.track.stop();
 		}
 
 		try {
@@ -370,7 +415,10 @@ public class AndroidAudioInterface implements AudioInterface {
 			e.printStackTrace();
 		}
 
-		track = null;
+		if (this.track != null) {
+			this.track.release();
+			this.track = null;
+		}
 	}
 
 	/**
@@ -381,6 +429,10 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#stopRec()
 	 */
 	public void stopRec() {
+		if (this.record != null) {
+			this.record.stop();
+		}
+		
 		try {
 			if (this.rec_thread != null) {
 				final Thread t = this.rec_thread;
@@ -393,6 +445,13 @@ public class AndroidAudioInterface implements AudioInterface {
 		}
 
 		this.as = null;
+	
+		if (this.record != null) {
+			this.record.release();
+			this.record = null;
+		}
+		
+		this.timestamp = 0;
 	}
 
 	/**
