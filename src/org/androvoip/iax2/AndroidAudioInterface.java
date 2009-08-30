@@ -30,6 +30,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.androvoip.audio.ULAW;
+
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -83,18 +85,20 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.javasound.Audio8k#codecPrefString()
 	 */
 	public String codecPrefString() {
-		final char[] prefs = { VoiceFrame.LIN16_NO };
+		final char[] prefs = { VoiceFrame.ULAW_NO };
 		String ret = "";
+		
 		for (int i = 0; i < prefs.length; i++) {
 			ret += (char) (prefs[i] + 66);
 		}
+		
 		return ret;
 	}
 
 	/**
 	 * Return an audio interface for a specified format.
 	 * <p>
-	 * Right now, we only support LIN16, and the handling for LIN16 will be
+	 * Right now, we only support ULAW, and the handling for ULAW is
 	 * built in to this class.
 	 * <p>
 	 * Called by com.mexuar.corraleta.protocol.Call.
@@ -103,7 +107,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 */
 	public AudioInterface getByFormat(Integer format) {
 		switch (format.intValue()) {
-		case VoiceFrame.LIN16_BIT:
+		case VoiceFrame.ULAW_BIT:
 			return this;
 		default:
 			return null;
@@ -118,7 +122,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#getFormatBit()
 	 */
 	public int getFormatBit() {
-		return VoiceFrame.LIN16_BIT;
+		return VoiceFrame.ULAW_BIT;
 	}
 
 	/**
@@ -127,7 +131,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#getSampSz()
 	 */
 	public int getSampSz() {
-		return 320;
+		return 160;
 	}
 
 	/**
@@ -205,9 +209,8 @@ public class AndroidAudioInterface implements AudioInterface {
 	}
 
 	private void playbackTime() {
-		short[] buf;
-
-		while (this.playQ.isEmpty() == false && (buf = this.playQ.remove(0)) != null) {
+		while (this.playQ.isEmpty() == false) {
+			short[] buf = this.playQ.remove(0);
 			writeBuff(buf);
 			if (this.unusedQ.size() < AndroidAudioInterface.UNUSED_CACHE_MAX) {
 				/* Cache a max of 10 buffers */
@@ -396,7 +399,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	 * @see com.mexuar.corraleta.audio.AudioInterface#supportedCodecs()
 	 */
 	public Integer supportedCodecs() {
-		return new Integer(VoiceFrame.LIN16_BIT);
+		return new Integer(VoiceFrame.ULAW_BIT);
 	}
 
 	/**
@@ -413,7 +416,7 @@ public class AndroidAudioInterface implements AudioInterface {
 		
 		while (qBuf == null && this.unusedQ.isEmpty() == false) {
 			qBuf = this.unusedQ.remove(0);
-			if (qBuf.length != buf.length / 2) {
+			if (qBuf.length != buf.length) {
 				qBuf = null;
 			}
 		}
@@ -421,17 +424,13 @@ public class AndroidAudioInterface implements AudioInterface {
 		if (qBuf == null) {
 			/* Did not find a suitable cached buffer */
 			Log.d("IAX2Audio", "unused buffer cache miss");
-			qBuf = new short[buf.length / 2];
+			qBuf = new short[buf.length];
 		}
 		
-		for (int i = 0, curs = 0; i < buf.length; i++) {
-			if ((i & 1) == 0) {
-				qBuf[curs] = (short) (buf[i] << 8);
-			} else {
-				qBuf[curs] |= (buf[i]);
-				curs++;
-			}
+		for (int i = 0; i < buf.length; i++) {
+			qBuf[i] = ULAW.ulaw2linear(buf[i]);
 		}
+		
 		this.playQ.add(qBuf);
 	}
 
