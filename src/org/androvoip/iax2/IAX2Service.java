@@ -58,7 +58,7 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 	private Call call = null;
 	private boolean registered = false;
 	private boolean registerSent = false;
-	private AndroidAudioInterface audioInterface = null;
+	private AndroidAudioInterface audioInterface = new AndroidAudioInterface();
 
 	private final IAX2ServiceAPI.Stub apiBinder = new IAX2ServiceAPI.Stub() {
 		public boolean getRegistrationStatus() throws RemoteException {
@@ -114,7 +114,6 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 	@Override
 	public void onCreate() {
 		Log.d("IAX2Service", "onCreate()");
-		this.audioInterface = new AndroidAudioInterface();
 	}
 
 	private synchronized void refreshIAX2Binder() {
