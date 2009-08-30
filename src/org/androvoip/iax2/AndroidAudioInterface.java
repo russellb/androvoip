@@ -32,6 +32,7 @@ import java.util.List;
 
 import org.androvoip.audio.ULAW;
 
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -54,6 +55,12 @@ public class AndroidAudioInterface implements AudioInterface {
 	private AudioSender as = null;
 	private Thread rec_thread = null;
 
+	private Context context = null;
+	
+	public void setContext(Context c) {
+		this.context = c;
+	}
+	
 	/**
 	 * Audio properties have changed.
 	 * <p>
@@ -294,6 +301,12 @@ public class AndroidAudioInterface implements AudioInterface {
 			return;
 		}
 
+		AudioManager aMan = (AudioManager) this.context.getSystemService(Context.AUDIO_SERVICE);
+		aMan.setRouting(AudioManager.MODE_IN_CALL, 
+				AudioManager.ROUTE_EARPIECE, 
+				AudioManager.ROUTE_ALL);
+		aMan.setMode(AudioManager.MODE_IN_CALL);
+		
 		final Runnable tplay = new Runnable() {
 			public void run() {
 				playTick();

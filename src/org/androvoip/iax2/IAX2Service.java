@@ -143,6 +143,7 @@ public class IAX2Service extends Service implements ProtocolEventListener,
 		/* Start the binder if we have not done so already. */
 		try {
 			if (this.binder == null) {
+				this.audioInterface.setContext(this);
 				this.binder = new BinderSE(host, this.audioInterface);
 				this.lastHost = host;
 				this.lastUsername = "";
