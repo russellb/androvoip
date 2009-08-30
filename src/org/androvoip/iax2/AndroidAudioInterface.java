@@ -282,7 +282,7 @@ public class AndroidAudioInterface implements AudioInterface {
 								AudioFormat.ENCODING_PCM_16BIT);
 
 		try {
-			this.track = new AudioTrack(AudioManager.STREAM_MUSIC,
+			this.track = new AudioTrack(AudioManager.STREAM_VOICE_CALL,
 								8000, /* 8 kHz sample rate */
 								AudioFormat.CHANNEL_CONFIGURATION_MONO,
 								AudioFormat.ENCODING_PCM_16BIT,
