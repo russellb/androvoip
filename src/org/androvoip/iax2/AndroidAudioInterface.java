@@ -52,7 +52,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	
 	/* Data for the receive path */
 	private AudioTrack track = null;
-	private Thread play_thread = null;
+	private Thread playThread = null;
 	private List<short[]> playQ = Collections.synchronizedList(new LinkedList<short[]>());
 	private static final int UNUSED_CACHE_MAX = 10;
 	private List<short[]> unusedQ = Collections.synchronizedList(new LinkedList<short[]>());
@@ -60,7 +60,7 @@ public class AndroidAudioInterface implements AudioInterface {
 	/* Data for the transmit path */
 	private AudioRecord record = null;
 	private AudioSender as = null;
-	private Thread rec_thread = null;
+	private Thread recThread = null;
 	private long timestamp = 0;
 	private byte[] ulawBuf = new byte[SAMPLES_PER_FRAME];
 
@@ -187,7 +187,7 @@ public class AndroidAudioInterface implements AudioInterface {
 		
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
 		
-		while (this.rec_thread != null) {
+		while (this.recThread != null) {
 			int soFar = 0;
 			boolean error = false;
 			
@@ -266,7 +266,7 @@ public class AndroidAudioInterface implements AudioInterface {
 
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
 		
-		while (this.play_thread != null) {
+		while (this.playThread != null) {
 			playbackTime();
 			try {
 				Thread.sleep(delta);
@@ -319,8 +319,8 @@ public class AndroidAudioInterface implements AudioInterface {
 			}
 		};
 
-		this.rec_thread = new Thread(trec, "rec_thread");
-		this.rec_thread.start();
+		this.recThread = new Thread(trec, "rec_thread");
+		this.recThread.start();
 
 		/* Set up audio playback (receive) */
 
@@ -358,8 +358,8 @@ public class AndroidAudioInterface implements AudioInterface {
 			}
 		};
 
-		this.play_thread = new Thread(tplay, "play_thread");
-		this.play_thread.start();
+		this.playThread = new Thread(tplay, "play_thread");
+		this.playThread.start();
 
 		track.play();
 	}
@@ -405,10 +405,10 @@ public class AndroidAudioInterface implements AudioInterface {
 		}
 
 		try {
-			if (this.play_thread != null) {
-				final Thread t = this.play_thread;
+			if (this.playThread != null) {
+				final Thread t = this.playThread;
 				/* Setting this to null is the signal to the thread to exit. */
-				this.play_thread = null;
+				this.playThread = null;
 				t.join();
 			}
 		} catch (final InterruptedException e) {
@@ -434,10 +434,10 @@ public class AndroidAudioInterface implements AudioInterface {
 		}
 		
 		try {
-			if (this.rec_thread != null) {
-				final Thread t = this.rec_thread;
+			if (this.recThread != null) {
+				final Thread t = this.recThread;
 				/* Setting this to null is the signal to the thread to exit. */
-				this.rec_thread = null;
+				this.recThread = null;
 				t.join();
 			}
 		} catch (final InterruptedException e) {
