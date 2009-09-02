@@ -1,6 +1,9 @@
 /*
  * AndroVoIP -- VoIP for Android.
  *
+ * Copyright (C), 2006, Mexuar Technologies Ltd.
+ *  - from com.mexuar.corraleta.audio.javasound.AudioUlaw
+ * 
  * Copyright (C), 2009, Russell Bryant
  *
  * Russell Bryant <russell@russellbryant.net>
