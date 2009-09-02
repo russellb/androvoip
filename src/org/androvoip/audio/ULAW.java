@@ -21,8 +21,6 @@
 
 package org.androvoip.audio;
 
-import com.mexuar.corraleta.util.ByteBuffer;
-
 public class ULAW {
 	private static final boolean ZEROTRAP = true;
 	private static final short BIAS = 0x84;
@@ -107,33 +105,5 @@ public class ULAW {
 			}
 		}
 		return ((byte) ulawbyte);
-	}
-
-	public void convertToLin(byte[] in, byte[] out) {
-		convert(in, out);
-	}
-
-	public void convertFromLin(byte[] in, byte[] out) {
-		final ByteBuffer bb = ByteBuffer.wrap(in);
-		for (int i = 0; i < out.length; i++) {
-			final short s = bb.getShort();
-			out[i] = linear2ulaw(s);
-		}
-	}
-
-	/**
-	 * convert
-	 * 
-	 * @param in
-	 *            byte[]
-	 * @param out
-	 *            byte[]
-	 */
-	public static void convert(byte[] in, byte[] out) {
-		final ByteBuffer bb = ByteBuffer.wrap(out);
-		for (int i = 0; i < in.length; i++) {
-			final short s = ulaw2linear(in[i]);
-			bb.putShort(s);
-		}
 	}
 };
