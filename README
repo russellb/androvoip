@@ -1,6 +1,5 @@
 ===============================================================================
 ===                             AndroVoIP                                   ===
-===                      http://www.androvoip.org/                          ===
 ===============================================================================
 
 -------------------------------------------------------------------------------
@@ -18,11 +17,9 @@
 --- 1) About                                                                ---
 -------------------------------------------------------------------------------
 
-        AndroVoIP is a Voice over IP client for the Android platform.  For
-further information about what is supported and what future development is
-planned, see the project roadmap:
-
-        -> http://code.google.com/p/androvoip/wiki/Roadmap
+        AndroVoIP is a Voice over IP client for the Android platform.  It's
+currently in a proof-of-concept state.  It can make basic calls using the IAX2
+protocol.
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -43,10 +40,7 @@ development plugin installed.
 
 Copyright, Licensing, Trademarks: 
         -> COPYING
-        -> http://code.google.com/p/androvoip/wiki/Legal
-
-Other useful content:
-        -> http://code.google.com/p/androvoip/wiki/
+	-> https://github.com/russellb/androvoip/wiki/Legal
 
 Contact: 
         -> Russell Bryant <russell@russellbryant.net>
