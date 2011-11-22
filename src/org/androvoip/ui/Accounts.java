@@ -63,7 +63,7 @@ public class Accounts extends ListActivity implements OnItemClickListener {
 		getListView().setAdapter(new AccountsListAdapter(accounts));
 	}
 
-	public void onItemClick(AdapterView parent, View view, int position, long id) {
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Account account = (Account) parent.getItemAtPosition(position);
 		Intent intent = new Intent(this, Settings.class);
 		intent.putExtra("account", account);
