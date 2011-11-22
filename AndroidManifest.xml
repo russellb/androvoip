@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:versionCode="1"
-	android:versionName="1.0" package="org.androvoip">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.androvoip"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
 
 	<uses-permission android:name="android.permission.INTERNET"/>
 	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
@@ -35,7 +37,4 @@
 		</activity>
 		<service android:name=".iax2.IAX2Service"/>
 	</application>
-
-	<uses-sdk android:minSdkVersion="3"/>
-
-</manifest> 
+</manifest>
